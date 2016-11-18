@@ -89,7 +89,7 @@ if(isset($_POST['addmenu'])){
 	}
 		
 	if(empty($title)){
-		echo "<script type='text/javascript'>alert('Title Harus Di Isi');</script>";
+		echo "<script type='text/javascript'>alert('Nama Menu Harus Di Isi');</script>";
 	}else{
 		if($cbcontent==0){
 			mysql_query("INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
