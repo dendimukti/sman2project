@@ -370,6 +370,29 @@ function delfiles($del){
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
+<!-- 	<div class="row" style="margin: 0 20px;">
+		<div class="col-md-8">
+
+			<img src="../data/logos2.png"/ style="width: 34px;">
+			<b>Integrated Data Service</b><br>
+			<span style="color:#b8c7ce">SMA Negeri 2 Malang</span>
+		</div>
+		<div class="col-md-4"><i class="fa fa-sign-out"></i> Keluar</div>
+	</div> -->
+
+	<div class="user-panel">
+        <div class="pull-left image">
+          <img src="../data/logos2.png" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>Integrated Data Service</p>
+          <span style="color:#b8c7ce">SMA Negeri 2 Malang</span>
+        </div>
+        <div class="pull-right">
+          <a style="margin: 0 10px;color:#b8c7ce" href="?page=logout" style="margin-top:11px"><i class="fa fa-sign-out"></i> Keluar</a>
+        </div>
+      </div>
+
     <section class="sidebar">
       <!-- Sidebar user panel -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -383,16 +406,19 @@ function delfiles($del){
 			$n=1;
 			while($data=mysql_fetch_assoc($que2)){				
 				echo '<li class="active"><a href="#">
-				<i class="fa fa-circle-o"></i> '.$data['NAMA'];
+				<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
 						
-				echo '&nbsp;&nbsp;&nbsp; <i class="fa fa-pencil" aria-hidden="true" onclick="updkonten('.$data['ID_MENU'].')"></i>';
-				if($n>1)
+				if($n>1){
 					echo '<i class="fa fa-caret-up" aria-hidden="true" onclick="location.href=\'./?do=up&id='.$data['ID_MENU'].'\'"></i> ';
-					//echo '<img src="../plugins/datatables/images/sort_asc.png" onclick="location.href=\'./?do=up&id='.$data['ID_MENU'].'\'" /> ';
-				if($n<$tot-1)
+				}else{
+					echo '<i class="fa fa-caret-up disabled" aria-hidden="true" onclick="javascript:void(0)"></i> ';
+				}
+				if($n<$tot-1){
 					echo '<i class="fa fa-caret-down" aria-hidden="true" onclick="location.href=\'./?do=down&id='.$data['ID_MENU'].'\'"></i> ';
-					//echo '<img src="../plugins/datatables/images/sort_desc.png" onclick="location.href=\'./?do=down&id='.$data['ID_MENU'].'\'" /> ';
-				
+				}else{
+					echo '<i class="fa fa-caret-down disabled" aria-hidden="true" onclick="javascript:void(0)"></i> ';
+				}
+				echo '&nbsp;&nbsp;&nbsp; <i class="fa fa-pencil" aria-hidden="true" onclick="updkonten('.$data['ID_MENU'].')"></i>';
 				if($data['CONTENT']==0){					
 					echo '<span class="pull-right-container">
 			        	<i class="fa fa-angle-left pull-right"></i>
@@ -409,7 +435,12 @@ function delfiles($del){
 ?>
       <ul class="sidebar-menu">
         <li class="header">
-			DAFTAR MENU <button type="button" class="btn btn-primary" onclick="updkonten(0)">Tambah Menu</button>
+	        <div class="pull-left">
+	          <h1>Daftar Menu</h1>
+	        </div>
+	        <div class="pull-right">
+	          <button style="margin-top:5px;width: 136px;" type="button" class="btn btn-primary" onclick="updkonten(0)">Tambah Menu</button>
+	        </div>
 		</li>
 <?php
 	$que1=mysql_query("SELECT * FROM MENU WHERE LEVEL='1' ORDER BY URUTAN ASC");
@@ -419,16 +450,20 @@ function delfiles($del){
 		echo '
 		<li class="treeview active">
 			<a href="#">
-			<i class="fa fa-circle-o"></i>'.$data['NAMA'].' ';
+			<i class="fa '.$data['LOGO'].'"></i>'.$data['NAMA'].' ';
 		if($data['ID_MENU']>0){ 
-			echo '&nbsp;&nbsp;&nbsp; <i class="fa fa-pencil" aria-hidden="true" onclick="updkonten('.$data['ID_MENU'].')"></i>';
-			if($n>1)
+			if($n>1){
 				echo '<i class="fa fa-caret-up" aria-hidden="true" onclick="location.href=\'./?do=up&id='.$data['ID_MENU'].'\'"></i> ';
-				//echo '<img src="../plugins/datatables/images/sort_asc.png" onclick="location.href=\'./?do=up&id='.$data['ID_MENU'].'\'" /> ';
-			if($n<$tot-1)
+			}else{
+				echo '<i class="fa fa-caret-up disabled" aria-hidden="true" onclick="javascript:void(0)"></i> ';
+			}
+			if($n<$tot-1){
 				echo '<i class="fa fa-caret-down" aria-hidden="true" onclick="location.href=\'./?do=down&id='.$data['ID_MENU'].'\'"></i> ';
-				//echo '<img src="../plugins/datatables/images/sort_desc.png" onclick="location.href=\'./?do=down&id='.$data['ID_MENU'].'\'" /> ';
+			}else{
+				echo '<i class="fa fa-caret-down disabled" aria-hidden="true" onclick="javascript:void(0)"></i> ';
+			}
 		}
+			echo '&nbsp;&nbsp;&nbsp; <i class="fa fa-pencil" aria-hidden="true" onclick="updkonten('.$data['ID_MENU'].')"></i>';
 		if($data['CONTENT']==0){
 			echo '<span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
