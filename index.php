@@ -43,25 +43,46 @@
       opacity: 0.9;
       color: rgba(30, 40, 44, 0.9);
     }
+    .skin-blue .main-header .navbar {
+      background-color: #ecf0f5;
+    }
+    .skin-blue .main-header .logo {
+      background-color: #1e282c;
+    }
+    .user-panel {
+      padding: 0;
+    }
+    .user-panel>.info {
+        padding: 0;
+        left: 45px;
+        font-size: 10pt;
+        margin-top: 8px;
+    }
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="data/logos2.png" style="width: 30px;" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p style="margin-top: 10px;">Integrated Data Service</p>
+        </div>
+      </div>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+    </nav>
+  </header>
   <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-<table cellpadding="10">
-	<tr>
-		<td width="30%" height="100%"><img src="data/logos2.png"/ style="width: 35px;margin-left: 15px;"> &nbsp;&nbsp;</td>
-		<td>
-			<font color="#FFFFF">
-				<b>Integrated Data Service</b><br>
-				SMA Negeri 2 Malang
-			</font>
-		</td>
-	</tr>
-</table>
-  <br>
-    <section class="sidebar">
+  <aside class="main-sidebar">  
+  <section class="sidebar">
       <!-- Sidebar user panel -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
@@ -228,8 +249,7 @@ else{
     <strong>Copyright &copy; 2016 <a href="http://inagata.com">Inagata Technosmith</a>.</strong> All rights
     reserved.
   </footer>
-<!-- ./wrapper -->
-
+</div>
 <!-- jQuery 2.2.3 -->
 <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->

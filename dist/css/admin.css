@@ -10,18 +10,28 @@
 .content-wrapper, .right-side, .main-footer {
     margin-left: 530px;
 }
-.main-sidebar, .left-side {
-    padding-top: 0;
-}
 body {
     color: #fff;
 }
-.user-panel>.image>img {
-    max-width: 34px;
+.content{
+	color: #1e282c;
 }
-.user-panel {
-    padding: 20px;
-}
+
+    .skin-blue .main-header .navbar {
+      background-color: #ecf0f5;
+    }
+    .skin-blue .main-header .logo {
+      background-color: #1e282c;
+    }
+    .user-panel {
+      padding: 0;
+    }
+    .user-panel>.info {
+        padding: 0;
+        left: 45px;
+        font-size: 10pt;
+        margin-top: 8px;
+    }
 h1 {
   font-size: 24px;
   color: #b8c7ce;
@@ -29,7 +39,6 @@ h1 {
 }
 li.treeview.active i:nth-child(2) {
     margin-left: 35px;
-    margin-right: 50px;
 }
 li.treeview.active i:nth-child(3) {
     margin-left: 35px;
