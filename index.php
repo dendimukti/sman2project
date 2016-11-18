@@ -2,31 +2,7 @@
 	include "config/conn.php";
 //anim@inagata.com
 //an46smart@gmail.com	
-	function menu($content, $level, $parent){
-	    $que2=mysql_query("SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
-	    $jum=mysql_num_rows($que2);
-	    if($jum>0){
-			echo '<ul class="treeview-menu">';
-			while($data=mysql_fetch_assoc($que2)){				
-				if($data['CONTENT']==1)
-					$link='./?id='.$data['ID_MENU'];
-				else
-					$link='#';
-					
-				echo '<li><a href="'.$link.'">
-				<i class="fa fa-circle-o"></i> '.$data['NAMA'];
-			    if($data['CONTENT']==0){
-					echo '<span class="pull-right-container">
-			        	<i class="fa fa-angle-left pull-right"></i>
-			            </span>';
-			        menu($data['CONTENT'], ($level+1), $data['ID_MENU']);
-				}
-			    echo '</a></li>';
-			}
-			echo '</ul>';
-		}
-		return;	
-	}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -91,6 +67,33 @@
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
 <?php
+
+	function menu($content, $level, $parent){
+	    $que2=mysql_query("SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
+	    $jum=mysql_num_rows($que2);
+	    if($jum>0){
+			echo '<ul class="treeview-menu">';
+			while($data=mysql_fetch_assoc($que2)){				
+				if($data['CONTENT']==1)
+					$link='./?id='.$data['ID_MENU'];
+				else
+					$link='#';
+					
+				echo '<li class="active"><a href="'.$link.'">
+				<i class="fa fa-circle-o"></i> '.$data['NAMA'];
+			    if($data['CONTENT']==0){
+					echo '<span class="pull-right-container">
+			        	<i class="fa fa-angle-left pull-right"></i>
+			            </span>';
+			        menu($data['CONTENT'], ($level+1), $data['ID_MENU']);
+				}
+			    echo '</a></li>';
+			}
+			echo '</ul>';
+		}
+		return;	
+	}
+	
 	$que1=mysql_query("SELECT * FROM MENU WHERE LEVEL='1' AND ID_MENU>0 ORDER BY URUTAN ASC");
 	while($data=mysql_fetch_assoc($que1)){
 		//redirect('.$data['ID_MENU'].');
@@ -99,7 +102,7 @@
 		else
 			$link='#';
 		
-		echo '<li class="treeview">
+		echo '<li class="treeview active">
           <a href="'.$link.'">';
         echo '<i class="fa '.$data['LOGO'].'"></i>'.$data['NAMA'];        
         
@@ -141,6 +144,7 @@
               <center>
 <?php
 if(isset($_REQUEST['id'])){
+	$idmenu=$_REQUEST['id'];
 	$que=mysql_query("SELECT * FROM DATA_FILES WHERE ID_MENU='$idmenu' ORDER BY URUTAN ASC");
 	$jenis="teks";
 	while($datafile=mysql_fetch_assoc($que)){
@@ -233,7 +237,7 @@ else{
 <!-- FastClick -->
 <script src="plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/app.min.js"></script>
+<script src="dist/js/app.js"></script>
 <!-- Sparkline -->
 <script src="plugins/sparkline/jquery.sparkline.min.js"></script>
 <!-- jvectormap -->
