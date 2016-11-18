@@ -71,7 +71,8 @@
           <img src="data/logos2.png" style="width: 30px;" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p style="margin-top: 10px;">Integrated Data Service</p>
+          <p style="margin-top: 10px;">Integrated Data Service<br>
+		  SMAN 2 Malang</p>
         </div>
       </div>
     </a>
@@ -167,6 +168,7 @@
 if(isset($_REQUEST['id'])){
 	$idmenu=$_REQUEST['id'];
 	$que=mysql_query("SELECT * FROM DATA_FILES WHERE ID_MENU='$idmenu' ORDER BY URUTAN ASC");
+	//echo "<h1>".."</h1>"
 	$jenis="teks";
 	while($datafile=mysql_fetch_assoc($que)){
 		if($datafile['JENIS']=="teks"){
@@ -181,7 +183,7 @@ if(isset($_REQUEST['id'])){
 		}
 		else if($datafile['JENIS']=="pdf"){
 			//echo " <a href='data/pdf/".$datafile['URL']."'>(PDF) ".$datafile['NAMA']."</a><br><br>";
-			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="80%" height="800" /><br><br>';
+			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="85%" height="750" /><br><br>';
 		}
 		else if($datafile['JENIS']=="gbr"){
 			echo " <img src='data/gbr/".$datafile['URL']."'/><br><br>";

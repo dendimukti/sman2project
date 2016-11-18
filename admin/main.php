@@ -1,16 +1,16 @@
 <?php
 function delfiles($del){
-	$que=mysql_query("SELECT URL FROM DATA_FILES WHERE ID_MENU='$del'");
+	$que=mysql_query("SELECT URL, JENIS FROM DATA_FILES WHERE ID_MENU='$del'");
 	while($datafile=mysql_fetch_assoc($que)){				
-		if($jenis=="pdf"){
+		if($datafile['JENIS']=="pdf"){
 			$file_to_delete = '../data/pdf/'.$datafile['URL'];
 			unlink($file_to_delete);						
 		}
-		else if($jenis=="vid"){
+		else if($datafile['JENIS']=="vid"){
 			$file_to_delete = '../data/vid/'.$datafile['URL'];
 			unlink($file_to_delete);							
 		}
-		else if($jenis=="gbr"){
+		else if($datafile['JENIS']=="gbr"){
 			$file_to_delete = '../data/gbr/'.$datafile['URL'];
 			unlink($file_to_delete);							
 		}					
@@ -327,7 +327,10 @@ if(isset($_POST['editmenu'])){
 	}
 	
 	function styleTextarea(){
-		tinymce.init({selector:'textarea'});
+		tinymce.init({
+		        mode : "textareas",
+		        editor_selector : "mceEditor"
+		});
 	}
 		
 	function add(){
@@ -388,7 +391,7 @@ if(isset($_POST['editmenu'])){
           <img src="../data/logos2.png" style="width: 30px;margin-top: 5px;" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p style="margin-top: 10px;">Integrated Data Service</p>
+          <p style="margin-top: 10px;">Integrated Data Service SMAN 2 Malang</p>
         </div>
       </div>
     </a>
