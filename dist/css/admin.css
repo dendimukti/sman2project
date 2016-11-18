@@ -1,12 +1,53 @@
 .main-sidebar, .left-side {
-    width: 290px;
+    width: 530px;
 }
 .main-header .logo {
-    width: 290px;
+    width: 530px;
 }
 .main-header .navbar {
-    margin-left: 290px;
+    margin-left: 530px;
 }
 .content-wrapper, .right-side, .main-footer {
-    margin-left: 290px;
+    margin-left: 530px;
+}
+body {
+    color: #1e282c;
+}
+.content{
+	color: #1e282c;
+}
+
+    .skin-blue .main-header .navbar {
+      background-color: #ecf0f5;
+    }
+    .skin-blue .main-header .logo {
+      background-color: #1e282c;
+    }
+    .user-panel {
+      padding: 0;
+    }
+    .user-panel>.info {
+        padding: 0;
+        left: 45px;
+        font-size: 10pt;
+        margin-top: 8px;
+    }
+h1 {
+  font-size: 24px;
+  color: #b8c7ce;
+  margin-top: 10px;
+}
+li.treeview.active i:nth-child(2) {
+    margin-left: 35px;
+}
+li.treeview.active i:nth-child(3) {
+    margin-left: 35px;
+}
+li.treeview.active i:nth-child(2), li.treeview.active i:nth-child(3), li.treeview.active i:nth-child(4) {
+    float: right;
+}
+@-moz-document url-prefix() {
+  li.treeview.active i:nth-child(2), li.treeview.active i:nth-child(3), li.treeview.active i:nth-child(4) {
+      margin-top: -13px;
+  }
 }

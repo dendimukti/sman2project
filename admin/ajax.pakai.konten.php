@@ -2,7 +2,7 @@
 include("../config/conn.php");
 $idmenu=$_GET['idmenu'];
 echo "
-<table border='1' cellspacing='0' id='table'>
+<table class='table table-bordered' id='table'>
 	<tr>
 		<td>
 			<select name='jeniskonten' id='jeniskonten'>
@@ -39,16 +39,15 @@ if($idmenu>0){
 		
 		echo '</td>
 		<td>
-			<img onclick="del(this, \''.$datafile['JENIS'].'\', \''.$datafile['ID_FILES'].'\');" src="../plugins/ckeditor/skins/moono/images/close.png" width="16" height="16" border="0" title="Hapus" /> ';
+			<i class="fa fa-trash-o" onclick="del(this, \''.$datafile['JENIS'].'\', \''.$datafile['ID_FILES'].'\');"/> ';
 if($n>1)
-	echo '<img onclick="changeOrder(\'up\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');" src="../plugins/datatables/images/sort_asc.png"/> ';
+	echo '<i class="fa fa-caret-up" onclick="changeOrder(\'up\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/>';
 if($n<$tot)
-	echo '<img onclick="changeOrder(\'down\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');" src="../plugins/datatables/images/sort_desc.png"/> ';
+	echo '<i class="fa fa-caret-down" onclick="changeOrder(\'down\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/>';
 		$n++;		
 		echo '</td>
 	</tr>';
 	}
 }
 echo "</table>";
-
 ?>	

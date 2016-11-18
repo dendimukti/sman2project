@@ -6,7 +6,7 @@
 				echo "<input type='hidden' name='name[]' value=''>";
 				echo "<input type='hidden' name='jenis[]' value='teks'>";
 				echo "<input type='file' name='data[]' value='' style='display:none'>";
-				echo "New Text:<br><textarea name='desc[]'></textarea><br>";
+				echo "New Text:<br><textarea name='desc[]' class='mceEditor'></textarea><br>";
 //				echo '<textarea>Easy (and free!) You should check out our premium features.</textarea>';
 			}
 			else if($jenis=='pdf'){

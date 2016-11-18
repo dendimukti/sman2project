@@ -1,5 +1,4 @@
 <?php
-
 function delfiles($del){
 	$que=mysql_query("SELECT URL FROM DATA_FILES WHERE ID_MENU='$del'");
 	while($datafile=mysql_fetch_assoc($que)){				
@@ -18,185 +17,97 @@ function delfiles($del){
 	}
 	mysql_query("DELETE FROM DATA_FILES WHERE ID_MENU='$del'");
 }
-
-	extract($_GET);
-	if(!empty($do)){		
-		$queid=mysql_query("SELECT LEVEL, PARENT, URUTAN FROM MENU WHERE ID_MENU='$id'");
-		$dataid=mysql_fetch_assoc($queid);
-		$level=$dataid['LEVEL'];
-		$parent=$dataid['PARENT'];
-		$urutan=$dataid['URUTAN'];
+extract($_GET);
+if(!empty($do)){		
+	$queid=mysql_query("SELECT LEVEL, PARENT, URUTAN FROM MENU WHERE ID_MENU='$id'");
+	$dataid=mysql_fetch_assoc($queid);
+	$level=$dataid['LEVEL'];
+	$parent=$dataid['PARENT'];
+	$urutan=$dataid['URUTAN'];
 //		echo "level:".$level." - parent:".$parent." - urutan:".$urutan."<br>";
-		if($do=="up"){
-			$quedo=mysql_query("SELECT ID_MENU, URUTAN FROM MENU WHERE PARENT='$parent' AND LEVEL='$level' AND URUTAN<'$urutan' ORDER BY URUTAN DESC LIMIT 1");
-			$datado=mysql_fetch_assoc($quedo);
-			$idup=$datado['ID_MENU'];
-			$urutanup=$datado['URUTAN'];
+	if($do=="up"){
+		$quedo=mysql_query("SELECT ID_MENU, URUTAN FROM MENU WHERE PARENT='$parent' AND LEVEL='$level' AND URUTAN<'$urutan' ORDER BY URUTAN DESC LIMIT 1");
+		$datado=mysql_fetch_assoc($quedo);
+		$idup=$datado['ID_MENU'];
+		$urutanup=$datado['URUTAN'];
 //			echo "idup:".$idup." - urutanup:".$urutanup."<br>";
-			mysql_query("UPDATE MENU SET URUTAN='$urutan' WHERE ID_MENU='$idup'");
-			mysql_query("UPDATE MENU SET URUTAN='$urutanup' WHERE ID_MENU='$id'");
-		}
-		else if($do=="down"){			
-			$quedo=mysql_query("SELECT ID_MENU, URUTAN FROM MENU WHERE PARENT='$parent' AND LEVEL='$level' AND URUTAN>'$urutan' ORDER BY URUTAN ASC LIMIT 1");
-			$datado=mysql_fetch_assoc($quedo);
-			$iddown=$datado['ID_MENU'];
-			$urutandown=$datado['URUTAN'];
+		mysql_query("UPDATE MENU SET URUTAN='$urutan' WHERE ID_MENU='$idup'");
+		mysql_query("UPDATE MENU SET URUTAN='$urutanup' WHERE ID_MENU='$id'");
+	}
+	else if($do=="down"){			
+		$quedo=mysql_query("SELECT ID_MENU, URUTAN FROM MENU WHERE PARENT='$parent' AND LEVEL='$level' AND URUTAN>'$urutan' ORDER BY URUTAN ASC LIMIT 1");
+		$datado=mysql_fetch_assoc($quedo);
+		$iddown=$datado['ID_MENU'];
+		$urutandown=$datado['URUTAN'];
 //			echo "iddown:".$iddown." - urutandown:".$urutandown."<br>";
-			mysql_query("UPDATE MENU SET URUTAN='$urutan' WHERE ID_MENU='$iddown'");
-			mysql_query("UPDATE MENU SET URUTAN='$urutandown' WHERE ID_MENU='$id'");
-		}	
-		echo "<script>document.location='./';</script>";
-	}
+		mysql_query("UPDATE MENU SET URUTAN='$urutan' WHERE ID_MENU='$iddown'");
+		mysql_query("UPDATE MENU SET URUTAN='$urutandown' WHERE ID_MENU='$id'");
+	}	
+	echo "<script>document.location='./';</script>";
+}
 	
-	function movemenu($id_menu, $level){
-		$level=$level+1;
-		$queun=mysql_query("SELECT * FROM MENU WHERE PARENT='$id_menu'");
-		while($dataun=mysql_fetch_assoc($queun)){
-			uncategorized($dataun['ID_MENU'], ($level));			
-		}
-		mysql_query("UPDATE MENU SET LEVEL='$level' WHERE PARENT='$id_menu'");
-		//echo "UPDATE MENU SET LEVEL='$level' WHERE PARENT='$id_menu'<br>";
+function movemenu($id_menu, $level){
+	$level=$level+1;
+	$queun=mysql_query("SELECT * FROM MENU WHERE PARENT='$id_menu'");
+	while($dataun=mysql_fetch_assoc($queun)){
+		movemenu($dataun['ID_MENU'], ($level));			
 	}
+	mysql_query("UPDATE MENU SET LEVEL='$level' WHERE PARENT='$id_menu'");
+}
 	
-	if(!empty($del)){
-		$datadel=mysql_fetch_assoc(mysql_query("SELECT * FROM MENU WHERE ID_MENU='$del'"));
-		if($datadel['CONTENT']>0){
-			mysql_query("DELETE FROM MENU WHERE ID_MENU='$del'");
-			delfiles($del);			
-		}else{
-			mysql_query("DELETE FROM MENU WHERE ID_MENU='$del'");
-			
-			$queun=mysql_query("SELECT * FROM MENU WHERE PARENT='$del'");
-			while($dataun=mysql_fetch_assoc($queun)){
-				movemenu($dataun['ID_MENU'], 3);
-			}
-			mysql_query("UPDATE MENU SET PARENT='-1', LEVEL='2' WHERE PARENT='$del'");
+if(!empty($del)){
+	$datadel=mysql_fetch_assoc(mysql_query("SELECT * FROM MENU WHERE ID_MENU='$del'"));
+	if($datadel['CONTENT']>0){
+		mysql_query("DELETE FROM MENU WHERE ID_MENU='$del'");
+		delfiles($del);			
+	}else{
+		mysql_query("DELETE FROM MENU WHERE ID_MENU='$del'");
+		
+		$quemv=mysql_query("SELECT * FROM MENU WHERE PARENT='$del'");
+		while($datamv=mysql_fetch_assoc($quemv)){ 
+			movemenu($datamv['ID_MENU'], 2);
 		}
-		echo "<script>document.location='./';</script>";
+		mysql_query("UPDATE MENU SET PARENT='-1', LEVEL='2' WHERE PARENT='$del'");
+		
 	}
+	echo "<script>document.location='./';</script>";
+}
 	
-	if(isset($_POST['addmenu'])){
-		$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
-		$urutan=mysql_fetch_assoc($queurutan);
-		$urutan=$urutan['NO']+1;
-		extract($_POST);
-		if(empty($title)){
-			echo "<script type='text/javascript'>alert('Title Harus Di Isi');</script>";
-		}else{
-			if($cbcontent==0){
-				mysql_query("INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
-			}else{
-				mysql_query("INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
-				$quedata=mysql_query("SELECT MAX(ID_MENU) AS ID FROM MENU");
-				$idmenu=mysql_fetch_assoc($quedata);
-				$idmenu=$idmenu['ID'];
-				$confirm="";
-				for($i=0; $i<count($_POST['jenis']); $i++){
-					$jns = $_POST['jenis'][$i];
-					$name = $_POST['name'][$i];
-					$desc = $_POST['desc'][$i];
-					
-					if($jns!="teks"){
-						$data=$_FILES["data"]["name"][$i]; 
-						$tmp_name=$_FILES["data"]["tmp_name"][$i];
-					}					
-					if($jns=="pdf"){
-						$url=acak(10,"pdf");
-						$target_dir = "../data/pdf/";
-						$target_file = $target_dir . basename($data);
-						$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-					    $check = getimagesize($tmp_name);
-					    if($imageFileType=="pdf") {
-					    	$url.=".".$imageFileType;
-					        move_uploaded_file($tmp_name, $target_dir.$url);
-					        mysql_query("INSERT INTO DATA_FILES VALUES('', 'pdf', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
-							$confirm.="\n1 PDF have been uploaded,";
-					    } else {
-							$confirm.="\n1 PDF failed to upload,";
-					    }
-					}
-					else if($jns=="gbr"){
-						$url=acak(10,"gbr");
-						$target_dir = "../data/gbr/";
-						$target_file = $target_dir . basename($data);
-						$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-					    $check = getimagesize($tmp_name);
-					    if($check) {
-					    	$url.=".".$imageFileType;
-					        move_uploaded_file($tmp_name, $target_dir.$url);
-					        mysql_query("INSERT INTO DATA_FILES VALUES('', 'gbr', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
-							$confirm.="\n1 Image have been uploaded,";
-					    } else {
-							$confirm.="\n1 Image failed to upload,";
-					    }
-					}
-					else if($jns=="vid"){
-						$url=acak(10,"vid");
-						$target_dir = "../data/vid/";
-						$target_file = $target_dir . basename($data);
-						$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-					    $check = getimagesize($tmp_name);
-					    if($imageFileType=="mp4" || $imageFileType=="mpg" || $imageFileType=="mpeg" || $imageFileType=="avi" || $imageFileType=="flv") {
-					    	$url.=".".$imageFileType;
-					        move_uploaded_file($tmp_name, $target_dir.$url);
-					        mysql_query("INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
-							$confirm.="\n1 Video have been uploaded,";
-					    } else {
-							$confirm.="\n1 Video failed to upload,";
-					    }
-					}					
-					else if($jns=="teks"){
-					    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
-						$confirm.="\n1 text data have been uploaded,";
-					}
-				}
-				//	alert('".$confirm."');
-				echo "<script>
-					document.location='./';</script>";
-			}
-		}
+if(isset($_POST['addmenu'])){
+	$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
+	$urutan=mysql_fetch_assoc($queurutan);
+	$urutan=$urutan['NO']+1;
+	extract($_POST);		
+		
+	if($cblevel=="1"){
+		$cbicon="fa-home";
+	}else{
+		if($cbcontent=="1")
+			$cbicon="fa-file";
+		else
+			$cbicon="fa-folder-o";
 	}
-	
-	if(isset($_POST['editmenu'])){
-		extract($_POST);
-		$idmenu=$_POST['idmenu'];
 		
-		$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
-		$urutan=mysql_fetch_assoc($queurutan);
-		$urutan=$urutan['NO']+1;
-		
-		$queid=mysql_query("SELECT LEVEL, PARENT FROM MENU WHERE ID_MENU='$idmenu'");
-		$dataid=mysql_fetch_assoc($queid);
-		$level=$dataid['LEVEL'];
-		$parent=$dataid['PARENT'];
-		if($level!=$cblevel){
-			$level=$cblevel+1;
-			$quemv=mysql_query("SELECT * FROM MENU WHERE PARENT='$idmenu'");
-//			echo "SELECT * FROM MENU WHERE PARENT='$idmenu'";
-			while($datamv=mysql_fetch_assoc($quemv)){
-				movemenu($datamv['ID_MENU'], $level);
-			}
-			mysql_query("UPDATE MENU SET LEVEL='$level' WHERE PARENT='$idmenu'");
-			//echo "UPDATE MENU SET LEVEL='$level' WHERE PARENT='$idmenu'<br>";
-		}
-		
-		mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', LEVEL='$cblevel', PARENT='$cbparent', URUTAN='$urutan', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
-		
+	if(empty($title)){
+		echo "<script type='text/javascript'>alert('Title Harus Di Isi');</script>";
+	}else{
 		if($cbcontent==0){
-			delfiles($idmenu);
+			mysql_query("INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
 		}else{
-			$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM DATA_FILES WHERE ID_MENU='$idmenu'");
-			$urutan=mysql_fetch_assoc($queurutan);
-			$no=$urutan['NO'];
+			mysql_query("INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
+			$quedata=mysql_query("SELECT MAX(ID_MENU) AS ID FROM MENU");
+			$idmenu=mysql_fetch_assoc($quedata);
+			$idmenu=$idmenu['ID'];
+			$confirm="";
 			for($i=0; $i<count($_POST['jenis']); $i++){
 				$jns = $_POST['jenis'][$i];
 				$name = $_POST['name'][$i];
 				$desc = $_POST['desc'][$i];
-				$urutan=$no+$i+1;
+				
 				if($jns!="teks"){
 					$data=$_FILES["data"]["name"][$i]; 
 					$tmp_name=$_FILES["data"]["tmp_name"][$i];
-				}
+				}					
 				if($jns=="pdf"){
 					$url=acak(10,"pdf");
 					$target_dir = "../data/pdf/";
@@ -206,7 +117,7 @@ function delfiles($del){
 				    if($imageFileType=="pdf") {
 				    	$url.=".".$imageFileType;
 				        move_uploaded_file($tmp_name, $target_dir.$url);
-				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'pdf', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'pdf', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
 						$confirm.="\n1 PDF have been uploaded,";
 				    } else {
 						$confirm.="\n1 PDF failed to upload,";
@@ -221,7 +132,7 @@ function delfiles($del){
 				    if($check) {
 				    	$url.=".".$imageFileType;
 				        move_uploaded_file($tmp_name, $target_dir.$url);
-				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'gbr', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'gbr', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
 						$confirm.="\n1 Image have been uploaded,";
 				    } else {
 						$confirm.="\n1 Image failed to upload,";
@@ -236,25 +147,127 @@ function delfiles($del){
 				    if($imageFileType=="mp4" || $imageFileType=="mpg" || $imageFileType=="mpeg" || $imageFileType=="avi" || $imageFileType=="flv") {
 				    	$url.=".".$imageFileType;
 				        move_uploaded_file($tmp_name, $target_dir.$url);
-				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
 						$confirm.="\n1 Video have been uploaded,";
 				    } else {
 						$confirm.="\n1 Video failed to upload,";
 				    }
 				}					
 				else if($jns=="teks"){
-				    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($urutan)."')");
+				    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
 					$confirm.="\n1 text data have been uploaded,";
 				}
 			}
-			//echo "<script>alert('".$confirm."');</script>";				
+				//	alert('".$confirm."');
+			echo "<script>
+				document.location='./';</script>";
 		}
-		echo "<script>document.location='./?id=".$idmenu."';</script>";	
 	}
-
-?>
-<script type="text/javascript">
+}
 	
+if(isset($_POST['editmenu'])){
+	extract($_POST);
+	$idmenu=$_POST['idmenu'];
+	
+	$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
+	$urutan=mysql_fetch_assoc($queurutan);
+	$urutan=$urutan['NO']+1;
+	
+	$queid=mysql_query("SELECT LEVEL, PARENT FROM MENU WHERE ID_MENU='$idmenu'");
+	$dataid=mysql_fetch_assoc($queid);
+	$level=$dataid['LEVEL'];
+	$parent=$dataid['PARENT'];
+	if($level!=$cblevel){
+	$level=$cblevel+1;
+		$quemv=mysql_query("SELECT * FROM MENU WHERE PARENT='$idmenu'");
+		while($datamv=mysql_fetch_assoc($quemv)){
+			movemenu($datamv['ID_MENU'], $level);
+		}
+		mysql_query("UPDATE MENU SET LEVEL='$level' WHERE PARENT='$idmenu'");
+	}
+		
+	if($cblevel=="1"){
+		$cbicon="fa-home";
+	}else{
+		if($cbcontent=="1")
+			$cbicon="fa-file";
+		else
+			$cbicon="fa-folder-o";
+	}
+		
+	mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', LEVEL='$cblevel', PARENT='$cbparent', URUTAN='$urutan', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
+		
+	if($cbcontent==0){
+		delfiles($idmenu);
+	}else{
+		$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM DATA_FILES WHERE ID_MENU='$idmenu'");
+		$urutan=mysql_fetch_assoc($queurutan);
+		$no=$urutan['NO'];
+		for($i=0; $i<count($_POST['jenis']); $i++){
+			$jns = $_POST['jenis'][$i];
+			$name = $_POST['name'][$i];
+			$desc = $_POST['desc'][$i];
+			$urutan=$no+$i+1;
+			if($jns!="teks"){
+				$data=$_FILES["data"]["name"][$i]; 
+				$tmp_name=$_FILES["data"]["tmp_name"][$i];
+			}
+			if($jns=="pdf"){
+				$url=acak(10,"pdf");
+				$target_dir = "../data/pdf/";
+				$target_file = $target_dir . basename($data);
+				$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			    $check = getimagesize($tmp_name);
+			    if($imageFileType=="pdf") {
+			    	$url.=".".$imageFileType;
+			        move_uploaded_file($tmp_name, $target_dir.$url);
+			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'pdf', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+					$confirm.="\n1 PDF have been uploaded,";
+			    } else {
+					$confirm.="\n1 PDF failed to upload,";
+			    }
+			}
+			else if($jns=="gbr"){
+				$url=acak(10,"gbr");
+				$target_dir = "../data/gbr/";
+				$target_file = $target_dir . basename($data);
+				$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			    $check = getimagesize($tmp_name);
+			    if($check) {
+			    	$url.=".".$imageFileType;
+			        move_uploaded_file($tmp_name, $target_dir.$url);
+			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'gbr', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+					$confirm.="\n1 Image have been uploaded,";
+			    } else {
+					$confirm.="\n1 Image failed to upload,";
+			    }
+			}
+			else if($jns=="vid"){
+				$url=acak(10,"vid");
+				$target_dir = "../data/vid/";
+				$target_file = $target_dir . basename($data);
+				$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			    $check = getimagesize($tmp_name);
+			    if($imageFileType=="mp4" || $imageFileType=="mpg" || $imageFileType=="mpeg" || $imageFileType=="avi" || $imageFileType=="flv") {
+			    	$url.=".".$imageFileType;
+			        move_uploaded_file($tmp_name, $target_dir.$url);
+			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+					$confirm.="\n1 Video have been uploaded,";
+			    } else {
+					$confirm.="\n1 Video failed to upload,";
+			    }
+			}					
+			else if($jns=="teks"){
+			    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($urutan)."')");
+				$confirm.="\n1 text data have been uploaded,";
+			}
+		}
+			//echo "<script>alert('".$confirm."');</script>";				
+	}
+	echo "<script>document.location='./?id=".$idmenu."';</script>";	
+}
+?>
+<script type="text/javascript">	
 	function updkonten(data){
 		$("#konten").fadeOut();
 		var id = data.toString();
@@ -268,7 +281,6 @@ function delfiles($del){
 	        }
 	    });	    
 	}
-
 	function del(obj, jeniskonten, id){
 		var jenis = jeniskonten.toString();
 		var iddata = parseInt(id);		
@@ -367,10 +379,28 @@ function delfiles($del){
 	}
   </script>
 <div class="wrapper"> 
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="./" class="logo">
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="../data/logos2.png" style="width: 30px;margin-top: 5px;" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p style="margin-top: 10px;">Integrated Data Service</p>
+        </div>
+      </div>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+    	<a class="pull-right btn btn-primary" href="?page=logout" style="margin-right: 25px;top: 15px;position: relative;"><i class="fa fa-sign-out"></i>Keluar</a>
+    </nav>
+  </header>
   <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+  <aside class="main-sidebar">  
+  <section class="sidebar">
       <!-- Sidebar user panel -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
 
@@ -383,20 +413,23 @@ function delfiles($del){
 			$n=1;
 			while($data=mysql_fetch_assoc($que2)){				
 				echo '<li class="active"><a href="#">
-				<i class="fa fa-circle-o"></i> '.$data['NAMA'];
+				<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
 						
-				echo '&nbsp;&nbsp;&nbsp; <i class="fa fa-pencil" aria-hidden="true" onclick="updkonten('.$data['ID_MENU'].')"></i>';
-				if($n>1)
+				if($n>1){
 					echo '<i class="fa fa-caret-up" aria-hidden="true" onclick="location.href=\'./?do=up&id='.$data['ID_MENU'].'\'"></i> ';
-					//echo '<img src="../plugins/datatables/images/sort_asc.png" onclick="location.href=\'./?do=up&id='.$data['ID_MENU'].'\'" /> ';
-				if($n<$tot-1)
+				}else{
+					echo '<i class="fa fa-caret-up disabled" aria-hidden="true" onclick="javascript:void(0)"></i> ';
+				}
+				if($n<$tot-1){
 					echo '<i class="fa fa-caret-down" aria-hidden="true" onclick="location.href=\'./?do=down&id='.$data['ID_MENU'].'\'"></i> ';
-					//echo '<img src="../plugins/datatables/images/sort_desc.png" onclick="location.href=\'./?do=down&id='.$data['ID_MENU'].'\'" /> ';
-				
+				}else{
+					echo '<i class="fa fa-caret-down disabled" aria-hidden="true" onclick="javascript:void(0)"></i> ';
+				}
+				echo '&nbsp;&nbsp;&nbsp; <i class="fa fa-pencil" aria-hidden="true" onclick="updkonten('.$data['ID_MENU'].')"></i>';
 				if($data['CONTENT']==0){					
-					echo '<span class="pull-right-container">
-			        	<i class="fa fa-angle-left pull-right"></i>
-			            </span>';
+					// echo '<span class="pull-right-container">
+			  //       	<i class="fa fa-angle-left pull-right"></i>
+			  //           </span>';
 					menu($data['CONTENT'], ($level+1), $data['ID_MENU']);
 				}
 				echo '</a></i>';
@@ -409,7 +442,12 @@ function delfiles($del){
 ?>
       <ul class="sidebar-menu">
         <li class="header">
-			DAFTAR MENU <button type="button" class="btn btn-primary" onclick="updkonten(0)">Tambah Menu</button>
+	        <div class="pull-left">
+	          <h1>Daftar Menu</h1>
+	        </div>
+	        <div class="pull-right">
+	          <button style="margin-top:5px;width: 136px;" type="button" class="btn btn-primary" onclick="updkonten(0)">Tambah Menu</button>
+	        </div>
 		</li>
 <?php
 	$que1=mysql_query("SELECT * FROM MENU WHERE LEVEL='1' ORDER BY URUTAN ASC");
@@ -419,20 +457,24 @@ function delfiles($del){
 		echo '
 		<li class="treeview active">
 			<a href="#">
-			<i class="fa fa-circle-o"></i>'.$data['NAMA'].' ';
+			<i class="fa '.$data['LOGO'].'"></i>'.$data['NAMA'].' ';
 		if($data['ID_MENU']>0){ 
-			echo '&nbsp;&nbsp;&nbsp; <i class="fa fa-pencil" aria-hidden="true" onclick="updkonten('.$data['ID_MENU'].')"></i>';
-			if($n>1)
+			if($n>1){
 				echo '<i class="fa fa-caret-up" aria-hidden="true" onclick="location.href=\'./?do=up&id='.$data['ID_MENU'].'\'"></i> ';
-				//echo '<img src="../plugins/datatables/images/sort_asc.png" onclick="location.href=\'./?do=up&id='.$data['ID_MENU'].'\'" /> ';
-			if($n<$tot-1)
+			}else{
+				echo '<i class="fa fa-caret-up disabled" aria-hidden="true" onclick="javascript:void(0)"></i> ';
+			}
+			if($n<$tot-1){
 				echo '<i class="fa fa-caret-down" aria-hidden="true" onclick="location.href=\'./?do=down&id='.$data['ID_MENU'].'\'"></i> ';
-				//echo '<img src="../plugins/datatables/images/sort_desc.png" onclick="location.href=\'./?do=down&id='.$data['ID_MENU'].'\'" /> ';
+			}else{
+				echo '<i class="fa fa-caret-down disabled" aria-hidden="true" onclick="javascript:void(0)"></i> ';
+			}
+			echo '&nbsp;&nbsp;&nbsp; <i class="fa fa-pencil" aria-hidden="true" onclick="updkonten('.$data['ID_MENU'].')"></i>';
 		}
 		if($data['CONTENT']==0){
-			echo '<span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>';  
+			// echo '<span class="pull-right-container">
+   //            <i class="fa fa-angle-left pull-right"></i>
+   //          </span>';  
         }
         echo '</a>';        
 	    $max=mysql_fetch_assoc(mysql_query("SELECT MAX(LEVEL) AS LV FROM MENU"));
@@ -441,7 +483,6 @@ function delfiles($del){
 		echo '</li>';
 		$n++;
 	}
-
 ?>
 
       </ul>
@@ -470,7 +511,7 @@ function delfiles($del){
 		$content=$data['CONTENT'];
 		$ket=$data['KET'];
 	}			  
-	echo $nama;			  
+//	echo $nama;			  
 ?>
 </h3>
             <!-- /.box-header -->
@@ -534,198 +575,6 @@ function delfiles($del){
     reserved.
   </footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-      <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <!-- Home tab content -->
-      <div class="tab-pane" id="control-sidebar-home-tab">
-        <h3 class="control-sidebar-heading">Recent Activity</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
-                <p>Will be 23 on April 24th</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-user bg-yellow"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-
-                <p>New phone +1(800)555-1234</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-
-                <p>nora@example.com</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-file-code-o bg-green"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-
-                <p>Execution time 5 seconds</p>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-        <h3 class="control-sidebar-heading">Tasks Progress</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Custom Template Design
-                <span class="label label-danger pull-right">70%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Update Resume
-                <span class="label label-success pull-right">95%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Laravel Integration
-                <span class="label label-warning pull-right">50%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Back End Framework
-                <span class="label label-primary pull-right">68%</span>
-              </h4>
-
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
-
-      </div>
-      <!-- /.tab-pane -->
-
-      <!-- Settings tab content -->
-      <div class="tab-pane" id="control-sidebar-settings-tab">
-        <form method="post">
-          <h3 class="control-sidebar-heading">General Settings</h3>
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Report panel usage
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Some information about this general settings option
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Allow mail redirect
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Other sets of options are available
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Expose author name in posts
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-
-            <p>
-              Allow the user to show his name in blog posts
-            </p>
-          </div>
-          <!-- /.form-group -->
-
-          <h3 class="control-sidebar-heading">Chat Settings</h3>
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Show me as online
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Turn off notifications
-              <input type="checkbox" class="pull-right">
-            </label>
-          </div>
-          <!-- /.form-group -->
-
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Delete chat history
-              <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
-            </label>
-          </div>
-          <!-- /.form-group -->
-        </form>
-      </div>
-      <!-- /.tab-pane -->
-    </div>
-  </aside>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
-  <div class="control-sidebar-bg"></div>
-
 </div>
 <!-- ./wrapper -->
 
@@ -736,7 +585,7 @@ function delfiles($del){
 <!-- FastClick -->
 <script src="../plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="../dist/js/app.min.js"></script>
+<script src="../dist/js/app.js"></script>
 <!-- Sparkline -->
 <script src="../plugins/sparkline/jquery.sparkline.min.js"></script>
 <!-- jvectormap -->
