@@ -65,7 +65,7 @@
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index.html" class="logo">
+    <a href="./" class="logo">
       <div class="user-panel">
         <div class="pull-left image">
           <img src="data/logos2.png" style="width: 30px;" alt="User Image">
@@ -101,7 +101,7 @@
 					$link='#';
 					
 				echo '<li class="active"><a href="'.$link.'">
-				<i class="fa fa-circle-o"></i> '.$data['NAMA'];
+				<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
 			    if($data['CONTENT']==0){
 					echo '<span class="pull-right-container">
 			        	<i class="fa fa-angle-left pull-right"></i>
@@ -167,6 +167,7 @@
 if(isset($_REQUEST['id'])){
 	$idmenu=$_REQUEST['id'];
 	$que=mysql_query("SELECT * FROM DATA_FILES WHERE ID_MENU='$idmenu' ORDER BY URUTAN ASC");
+	//echo "<h1>".."</h1>"
 	$jenis="teks";
 	while($datafile=mysql_fetch_assoc($que)){
 		if($datafile['JENIS']=="teks"){
@@ -181,7 +182,7 @@ if(isset($_REQUEST['id'])){
 		}
 		else if($datafile['JENIS']=="pdf"){
 			//echo " <a href='data/pdf/".$datafile['URL']."'>(PDF) ".$datafile['NAMA']."</a><br><br>";
-			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="80%" height="800" /><br><br>';
+			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="85%" height="750" /><br><br>';
 		}
 		else if($datafile['JENIS']=="gbr"){
 			echo " <img src='data/gbr/".$datafile['URL']."'/><br><br>";
@@ -249,6 +250,7 @@ else{
     <strong>Copyright &copy; 2016 <a href="http://inagata.com">Inagata Technosmith</a>.</strong> All rights
     reserved.
   </footer>
+</div>
 </div>
 <!-- jQuery 2.2.3 -->
 <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
