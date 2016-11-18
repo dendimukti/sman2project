@@ -1,0 +1,12 @@
+.main-sidebar, .left-side {
+    width: 290px;
+}
+.main-header .logo {
+    width: 290px;
+}
+.main-header .navbar {
+    margin-left: 290px;
+}
+.content-wrapper, .right-side, .main-footer {
+    margin-left: 290px;
+}
