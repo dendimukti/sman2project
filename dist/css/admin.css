@@ -46,3 +46,8 @@ li.treeview.active i:nth-child(3) {
 li.treeview.active i:nth-child(2), li.treeview.active i:nth-child(3), li.treeview.active i:nth-child(4) {
     float: right;
 }
+@-moz-document url-prefix() {
+  li.treeview.active i:nth-child(2), li.treeview.active i:nth-child(3), li.treeview.active i:nth-child(4) {
+      margin-top: -13px;
+  }
+}
