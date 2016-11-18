@@ -169,33 +169,42 @@ if(isset($_POST['editmenu'])){
 	extract($_POST);
 	$idmenu=$_POST['idmenu'];
 	
-	$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
-	$urutan=mysql_fetch_assoc($queurutan);
-	$urutan=$urutan['NO']+1;
-	
 	$queid=mysql_query("SELECT LEVEL, PARENT FROM MENU WHERE ID_MENU='$idmenu'");
 	$dataid=mysql_fetch_assoc($queid);
 	$level=$dataid['LEVEL'];
 	$parent=$dataid['PARENT'];
-	if($level!=$cblevel){
-	$level=$cblevel+1;
-		$quemv=mysql_query("SELECT * FROM MENU WHERE PARENT='$idmenu'");
-		while($datamv=mysql_fetch_assoc($quemv)){
-			movemenu($datamv['ID_MENU'], $level);
-		}
-		mysql_query("UPDATE MENU SET LEVEL='$level' WHERE PARENT='$idmenu'");
-	}
-		
+				
 	if($cblevel=="1"){
 		$cbicon="fa-home";
+		$cbparent="0";
 	}else{
 		if($cbcontent=="1")
 			$cbicon="fa-file";
 		else
 			$cbicon="fa-folder-o";
 	}
-		
-	mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', LEVEL='$cblevel', PARENT='$cbparent', URUTAN='$urutan', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
+	
+	if($level!=$cblevel){
+		$level=$cblevel+1;
+		$quemv=mysql_query("SELECT * FROM MENU WHERE PARENT='$idmenu'");
+		while($datamv=mysql_fetch_assoc($quemv)){
+			movemenu($datamv['ID_MENU'], $level);
+		}
+		mysql_query("UPDATE MENU SET LEVEL='$level' WHERE PARENT='$idmenu'");
+				
+		$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
+		$urutan=mysql_fetch_assoc($queurutan);
+		$urutan=$urutan['NO']+1;
+		mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', LEVEL='$cblevel', PARENT='$cbparent', URUTAN='$urutan', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
+	}else if(($level==$cblevel)&&($cbparent!=$parent)){
+		$urutan=0;
+		$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
+		$urutan=mysql_fetch_assoc($queurutan);
+		$urutan=$urutan['NO']+1;
+		mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', PARENT='$cbparent', CONTENT='$cbcontent', URUTAN='$urutan', KET='$ket' WHERE ID_MENU='$idmenu'");	
+	}else{
+		mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
+	}
 		
 	if($cbcontent==0){
 		delfiles($idmenu);
@@ -381,6 +390,8 @@ if(isset($_POST['editmenu'])){
 		//document.location="./?id="+$idmenu;		
 	}
   </script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">  
 <div class="wrapper"> 
   <header class="main-header">
 
@@ -603,4 +614,3 @@ if(isset($_POST['editmenu'])){
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
 </body>
-</html>

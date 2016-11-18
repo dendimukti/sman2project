@@ -3,19 +3,19 @@ include("../config/conn.php");
 $idmenu=$_GET['idmenu'];
 echo "
 <hr>
-<table class='table table-bordered' id='table'>
+<table class='table table-bordered' id='table' witdh='70%'>
 	<tr>
-		<td>
-			<select name='jeniskonten' id='jeniskonten'>
+		<th witdh='70%'>
+			<select name='jeniskonten' id='jeniskonten' class='form-control'>
 				<option value='teks'>Teks</option>
 				<option value='pdf'>PDF</option>
 				<option value='gbr'>Gambar</option>
 				<option value='vid'>Video</option>
 			</select>
-		</td>
-		<td>
-			<input type='button' id='btn' value='Add' onclick='add()'/>
-		</td>
+		</th>
+		<th witdh='30%'>
+			<button type='button' class='btn btn-primary' id='btn' onclick='add()'>Tambah Data Konten</button>
+		</th>
 	</tr>";
 if($idmenu>0){
 	$que=mysql_query("SELECT * FROM DATA_FILES WHERE ID_MENU='$idmenu' ORDER BY URUTAN ASC");
@@ -40,11 +40,15 @@ if($idmenu>0){
 		
 		echo '</td>
 		<td>
-			<i class="fa fa-trash-o" onclick="del(this, \''.$datafile['JENIS'].'\', \''.$datafile['ID_FILES'].'\');"/> ';
+			<i class="fa fa-trash-o" onclick="del(this, \''.$datafile['JENIS'].'\', \''.$datafile['ID_FILES'].'\');"/> &nbsp;&nbsp;&nbsp;&nbsp;';
 if($n>1)
-	echo '<i class="fa fa-caret-up" onclick="changeOrder(\'up\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/>';
+	echo '<i class="fa fa-caret-up" onclick="changeOrder(\'up\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/> &nbsp;&nbsp;&nbsp;&nbsp;';
+else
+	echo '<i class="fa fa-caret-up" onclick="changeOrder(\'up\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/> &nbsp;&nbsp;&nbsp;&nbsp;';
 if($n<$tot)
-	echo '<i class="fa fa-caret-down" onclick="changeOrder(\'down\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/>';
+	echo '<i class="fa fa-caret-down"/>';
+else
+	echo '<i class="fa fa-caret-down"/>';
 		$n++;		
 		echo '</td>
 	</tr>';

@@ -10,18 +10,24 @@
 	$ket="";
 	$idmenu=$_REQUEST['idmenu'];
 	if($idmenu==0){
-		echo '<h3>
-				Tambah Menu
-			</h3>';
+		echo "
+		<div class='row'>
+			<div class='col-md-6'>
+			  <div class='form-group'>			    
+			    <h3>Tambah Menu</h3>
+			  </div>
+			</div>
+		</div>";
 	}
 	else{
 		echo "
-		  <div class='form-group'>
-		    <div class='col-sm-offset-0 col-sm-10'>
-		    	<button type=\"button\" class=\"btn btn-danger\" id='btnDel' onClick='document.location=\"./?del=".$idmenu."\"'>Delete</button>
-		    	<br><br>
-		    </div>
-		  </div>";
+		<div class='row'>
+			<div class='col-md-6'>
+			  <div class='form-group'>			    
+			    <button type=\"button\" class=\"btn btn-danger\" id='btnDel' onClick='document.location=\"./?del=".$idmenu."\"'>Delete</button>
+			  </div>
+			</div>
+		</div>";
 		$que=mysql_query("SELECT * FROM MENU WHERE ID_MENU='$idmenu'");
 		$data=mysql_fetch_assoc($que);
 		$nama=$data['NAMA'];
@@ -48,7 +54,7 @@
 	    <label for="cblevel">Pilih Level Menu</label>
 	    <select class="form-control" name="cblevel" id="cblevel" onchange="changeparent(this.value)">
 		<?php
-			$datalevel=mysql_fetch_assoc(mysql_query("SELECT MAX(LEVEL) AS LV FROM MENU"));
+			$datalevel=mysql_fetch_assoc(mysql_query("SELECT MAX(LEVEL) AS LV FROM MENU WHERE CONTENT='0'"));
 			$datalevel=$datalevel['LV'];
 			for($i=1;$i<=$datalevel+1;$i++){
 				if($i==$level)
@@ -99,8 +105,8 @@
   </div>
   <div class="form-group">
 	<?php
-		if($idmenu==0)	echo "<input type='submit' name='addmenu' id='addmenu' class='btn btn-default' value='Submit'>";
-		else	echo "<input type='submit' name='editmenu' id='editmenu' class='btn btn-default' value='Edit'>";
+		if($idmenu==0)	echo "<input type='submit' name='addmenu' id='addmenu' class='btn btn-default' value='Simpan'>";
+		else	echo "<input type='submit' name='editmenu' id='editmenu' class='btn btn-default' value='Simpan'>";
 	?>
   </div>
 </form>

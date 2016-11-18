@@ -28,11 +28,7 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
   <link rel="stylesheet" href="../dist/css/admin.css">
-	</head>
-	<body class="hold-transition skin-blue sidebar-mini">
-<!--	<div id="test">
-		<textarea>Easy (and free!) You should check out our premium features.</textarea>
-	</div>	-->
+
 <?php
 	include "../config/conn.php";
 	
@@ -46,13 +42,13 @@
 			$data .= $dat[rand(0,35)];
 		}
 		if($tipe=="gbr"){
-			$data1=mysql_num_rows(mysql_query("SELECT URL_GBR FROM DATA_GBR WHERE URL_GBR'".$data.".jpg' or URL_GBR'".$data.".jpeg' or URL_GBR'".$data.".png'"));
+			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".jpg' OR URL_GBR'".$data.".jpeg' OR URL_GBR'".$data.".png'"));
 		}
 		else if($tipe=="pdf"){
-			$data1=mysql_num_rows(mysql_query("SELECT URL_PDF FROM DATA_PDF WHERE URL_PDF'".$data.".pdf'"));
+			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".pdf'"));
 		}
 		else if($tipe=="vid"){
-			$data1=mysql_num_rows(mysql_query("SELECT URL_VID FROM DATA_VID WHERE URL_VID'".$data.".mp4'"));
+			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".mp4'"));
 		}
 				
 		if($data1>0){
@@ -74,5 +70,5 @@
 		}
 	}
 ?>
-	</body>
+	
 </html>

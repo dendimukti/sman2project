@@ -77,6 +77,6 @@
 		?>
 		</td>
 		<td>
-			<img onclick="del(this, '<?php echo $jenis; ?>', 0);" src="../plugins/ckeditor/skins/moono/images/close.png" width="16" height="16" border="0" title="Hapus" />
+			<i class="fa fa-trash-o" onclick="del(this, '<?php echo $jenis; ?>', 0);"/>
 		</td>
 	</tr>
