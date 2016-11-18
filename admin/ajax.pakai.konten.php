@@ -2,6 +2,7 @@
 include("../config/conn.php");
 $idmenu=$_GET['idmenu'];
 echo "
+<hr>
 <table class='table table-bordered' id='table'>
 	<tr>
 		<td>

@@ -71,7 +71,7 @@
           <img src="data/logos2.png" style="width: 30px;" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p style="margin-top: 10px;">Integrated Data Service</p>
+          <p style="text-align: left;line-height: 19px;">Integrated Data Service<br><span style="color: #95adb7;font-size: 9pt;font-weight: 100;">SMA N 2 Malang</span></p>
         </div>
       </div>
     </a>
