@@ -383,6 +383,7 @@ function delfiles($del){
 
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
+    	<a class="pull-right btn btn-primary" href="?page=logout" style="margin-right: 25px;top: 15px;position: relative;"><i class="fa fa-sign-out"></i>Keluar</a>
     </nav>
   </header>
   <!-- Left side column. contains the logo and sidebar -->
