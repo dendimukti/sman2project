@@ -2,7 +2,7 @@
 include("../config/conn.php");
 $idmenu=$_GET['idmenu'];
 echo "
-<table border='1' cellspacing='0' id='table'>
+<table class='table table-bordered' id='table'>
 	<tr>
 		<td>
 			<select name='jeniskonten' id='jeniskonten'>
