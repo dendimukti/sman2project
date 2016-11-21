@@ -408,9 +408,10 @@ if(isset($_POST['editmenu'])){
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-    	<a class="pull-right btn btn-primary" href="?page=logout" style="margin-right: 25px;top: 15px;position: relative;"><i class="fa fa-sign-out"></i>Keluar</a>
-    </nav>
+<nav class="navbar navbar-static-top">
+   	<a class="pull-right btn btn-success" href="?page=logout" style="margin-right: 25px;top: 15px;position: relative;"><i class="fa fa-sign-out"></i>Keluar</a>
+</nav>
+
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">  
@@ -460,7 +461,7 @@ if(isset($_POST['editmenu'])){
 	          <h1>Daftar Menu</h1>
 	        </div>
 	        <div class="pull-right">
-	          <button style="margin-top:5px;width: 136px;" type="button" class="btn btn-primary" onclick="updkonten(0)">Tambah Menu</button>
+	          <button style="margin-top:5px;width: 136px;" type="button" class="btn btn-success" onclick="updkonten(0)">Tambah Menu</button>
 	        </div>
 		</li>
 <?php

@@ -50,7 +50,7 @@
 					    <input type='file' name='data[]' accept='image/*'>
 					  </div>					
 					  <div class='form-group'>
-					    <label>Deskripsi Pdf:</label>
+					    <label>Deskripsi Gambar:</label>
 					    <input type='text' class='form-control' name='desc[]' placeholder='Deskripsi'>
 					  </div>";
 			}

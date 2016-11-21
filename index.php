@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="plugins/jvectormap/jquery-jvectormap-1.2.2.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="dist/css/public.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
@@ -59,8 +60,30 @@
         margin-top: 8px;
     }
   </style>
+<script type="text/javascript">
+
+var tim = 0;
+function reload() {
+	tim = setTimeout("window.location.replace('./');",300000);   // 5 minutes	#	1 Sec = 1000
+}
+
+function canceltimer() {
+	window.clearTimeout(tim);  // cancel the timer on each mousemove/click
+	reload();  // and restart it
+}
+
+function changeval(data){
+	var teks = data.toString();
+	//alert(teks);
+	if(teks=="Full Screen"){
+		document.getElementByClassName("btn btn-success").value="Exit Full Screen";
+	}else{
+		document.getElementByClassName("btn btn-success").value="Full Screen";
+	}
+}
+</script>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" onclick="canceltimer()" onmouseover="canceltimer()" onkeypress="canceltimer()">
 <div class="wrapper">
   <header class="main-header">
 
@@ -76,9 +99,13 @@
       </div>
     </a>
 
-    <!-- Header Navbar: style can be found in header.less -->
+    <!-- Header Navbar: style can be found in header.less 
     <nav class="navbar navbar-static-top">
+    	<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      	</a>
     </nav>
+    -->
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">  
@@ -181,11 +208,21 @@ if(isset($_REQUEST['id'])){
 			echo "<br><br>";
 		}
 		else if($datafile['JENIS']=="pdf"){
-			//echo " <a href='data/pdf/".$datafile['URL']."'>(PDF) ".$datafile['NAMA']."</a><br><br>";
-			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="85%" height="750" /><br><br>';
+//			echo '<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">';
+//			echo '<object data="data/pdf/'.$datafile['URL'].'" type="application/pdf"  width="100%" height="750">
+//					<embed src="data/pdf/'.$datafile['URL'].'" width="100%" height="750" type="application/pdf"/>
+//				</object>
+//			</a>';
+
+//			echo '<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+//				<input type="button" class="btn btn-success" value="Full Screen" onclick="changeval(this.value)"/>
+//				</a>';
+			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="100%" height="750" type="application/pdf"/>';
+
+			echo '<br><br>';
 		}
 		else if($datafile['JENIS']=="gbr"){
-			echo " <img src='data/gbr/".$datafile['URL']."'/><br><br>";
+			echo "<a href='#' class='sidebar-toggle' data-toggle='offcanvas' role='button'><img src='data/gbr/".$datafile['URL']."'/></a><br><br>";
 		}
 	}              
 }

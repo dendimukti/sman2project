@@ -14,7 +14,7 @@ echo "
 			</select>
 		</th>
 		<th witdh='30%'>
-			<button type='button' class='btn btn-primary' id='btn' onclick='add()'>Tambah Data Konten</button>
+			<button type='button' class='btn btn-success' id='btn' onclick='add()'>Tambah Data Konten</button>
 		</th>
 	</tr>";
 if($idmenu>0){

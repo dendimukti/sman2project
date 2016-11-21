@@ -14,7 +14,7 @@
 		<div class='row'>
 			<div class='col-md-6'>
 			  <div class='form-group'>			    
-			    <h3>Tambah Menu</h3>
+			    <b><h3>Tambah Menu</h3></b>
 			  </div>
 			</div>
 		</div>";
