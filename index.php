@@ -22,11 +22,11 @@
   <link rel="stylesheet" href="plugins/jvectormap/jquery-jvectormap-1.2.2.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-  <link rel="stylesheet" href="dist/css/public.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
+<!--  AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
 
+	<link rel="stylesheet" href="dist/css/public.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -45,10 +45,10 @@
       color: rgba(30, 40, 44, 0.9);
     }
     .skin-blue .main-header .navbar {
-      background-color: #ecf0f5;
+      background-color: #38db4e;
     }
     .skin-blue .main-header .logo {
-      background-color: #1e282c;
+      background-color: #2c3b41;
     }
     .user-panel {
       padding: 0;
@@ -99,13 +99,30 @@ function changeval(data){
       </div>
     </a>
 
-    <!-- Header Navbar: style can be found in header.less 
+    <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
     	<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       	</a>
+      	    
+	    <div class="navbar-custom-menu">
+	    	<ul class="nav navbar-nav">
+          <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-clock-o"></i> &nbsp; 
+		<?php
+			$today = getdate();
+			$hari=array("", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu");
+			$bulan=array("", "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
+			echo $hari[$today['wday']].", ".$today['mday']." ".$bulan[$today['mon']]." ".$today['year'];
+			
+		?>
+			</a>
+          </li>
+          <li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</li>
+        </ul>
+	    </div>
     </nav>
-    -->
+    
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">  
@@ -222,7 +239,20 @@ if(isset($_REQUEST['id'])){
 			echo '<br><br>';
 		}
 		else if($datafile['JENIS']=="gbr"){
-			echo "<a href='#' class='sidebar-toggle' data-toggle='offcanvas' role='button'><img src='data/gbr/".$datafile['URL']."'/></a><br><br>";
+			echo "<img src='data/gbr/".$datafile['URL']."' class='gbr'/><br><br>";
+//			echo '<img class="myImg" src="data/pdf/'.$datafile['URL'].'" alt="Trolltunga, Norway" width="300" height="200">
+//				<!-- The Modal -->
+//				<div id="myModal'.$datafile['URL'].'" class="modal">
+//				
+//				  <!-- The Close Button -->
+//				  <span class="close" onclick="document.getElementById(\'myModal'.$datafile['URL'].'\').style.display=\'none\'">&times;</span>
+//				
+//				  <!-- Modal Content (The Image) -->
+//				  <img class="modal-content" class="img01">
+//				
+//				  <!-- Modal Caption (Image Text) -->
+//				  <div class="caption"></div>
+//				</div>';
 		}
 	}              
 }
