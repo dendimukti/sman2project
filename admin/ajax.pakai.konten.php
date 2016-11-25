@@ -11,6 +11,7 @@ echo "
 				<option value='pdf'>PDF</option>
 				<option value='gbr'>Gambar</option>
 				<option value='vid'>Video</option>
+				<option value='html'>Html</option>
 			</select>
 		</th>
 		<th witdh='30%'>
@@ -36,6 +37,9 @@ if($idmenu>0){
 		}
 		else if($datafile['JENIS']=="gbr"){
 			echo " <a href='../data/gbr/".$datafile['URL']."'>(GBR) ".$datafile['NAMA']."</a><br>";
+		}
+		else if($datafile['JENIS']=="html"){
+			echo " <a href='../data/html/".$datafile['URL']."'>(HTML) ".$datafile['NAMA']."</a><br>";
 		}
 		
 		echo '</td>

@@ -50,6 +50,9 @@
 		else if($tipe=="vid"){
 			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".mp4'"));
 		}
+		else if($tipe=="html"){
+			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".html'"));
+		}
 				
 		if($data1>0){
 			acak($jum, $tipe);

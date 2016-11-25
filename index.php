@@ -33,6 +33,7 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+  
   <style type="text/css">
     h1 {
       font-size: 44pt;
@@ -59,7 +60,43 @@
         font-size: 10pt;
         margin-top: 8px;
     }
-  </style>
+    .skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
+	    color: #fff;
+	    background: #1e282c;
+	    border-left-color: #38db4e;
+	}
+	a{
+	    color: #38db4e; 
+	    text-decoration: none;
+	}
+	a:hover{
+	    color: #38db4e; 
+	    text-decoration: none;
+	}
+	.main-header .logo {
+	    -webkit-transition: width .3s ease-in-out;
+	    -o-transition: width .3s ease-in-out;
+	    transition: width .3s ease-in-out;
+	    display: block;
+	    float: left;
+	    height: 50px;
+	    font-size: 20px;
+	    line-height: 50px;
+	    text-align: center;
+	    width: 230px;
+	    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	    padding: 0 10px;
+	    font-weight: 300;
+	    overflow: hidden;
+	}
+	.sidebar-mini.sidebar-collapse .sidebar-menu>li:hover>a>span:not(.pull-right), .sidebar-mini.sidebar-collapse .sidebar-menu>li:hover>.treeview-menu {
+	    display: block !important;
+	    position: absolute;
+	    width: 250px;
+	    left: 50px;
+	}
+</style>
+
 <script type="text/javascript">
 
 var tim = 0;
@@ -86,7 +123,6 @@ function changeval(data){
 <body class="hold-transition skin-blue sidebar-mini" onclick="canceltimer()" onmouseover="canceltimer()" onkeypress="canceltimer()">
 <div class="wrapper">
   <header class="main-header">
-
     <!-- Logo -->
     <a href="./" class="logo">
       <div class="user-panel">
@@ -133,57 +169,69 @@ function changeval(data){
         <li class="header">MAIN NAVIGATION</li>
 <?php
 
-	function menu($content, $level, $parent){
-	    $que2=mysql_query("SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
-	    $jum=mysql_num_rows($que2);
-	    if($jum>0){
-			echo '<ul class="treeview-menu">';
-			while($data=mysql_fetch_assoc($que2)){				
-				if($data['CONTENT']==1)
-					$link='./?id='.$data['ID_MENU'];
-				else
-					$link='#';
-					
-				echo '<li class="active"><a href="'.$link.'">
-				<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
-			    if($data['CONTENT']==0){
-					echo '<span class="pull-right-container">
-			        	<i class="fa fa-angle-left pull-right"></i>
-			            </span>';
-			        menu($data['CONTENT'], ($level+1), $data['ID_MENU']);
-				}
-			    echo '</a></li>';
-			}
-			echo '</ul>';
+function menu($content, $level, $parent){
+    $que2=mysql_query("SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
+    $jum=mysql_num_rows($que2);
+    if($jum>0){
+		echo '
+		<ul class="treeview-menu">';
+		while($data=mysql_fetch_assoc($que2)){
+			if($data['CONTENT']==1)
+				$link='./?id='.$data['ID_MENU'];
+			else
+				$link='#';
+				
+			echo '
+			<li class="active">
+				<a href="'.$link.'">
+					<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
+				    if($data['CONTENT']==0){
+						echo '
+						<span class="pull-right-container">
+				        	<i class="fa fa-angle-left pull-right"></i>
+				        </span>';
+					}
+			    echo '
+				</a>';
+				menu($data['CONTENT'], ($level+1), $data['ID_MENU']);
+		    echo '
+			</li>';
 		}
-		return;	
+		echo '
+		</ul>';
 	}
+	return;	
+}
 	
-	$que1=mysql_query("SELECT * FROM MENU WHERE LEVEL='1' AND ID_MENU>0 ORDER BY URUTAN ASC");
-	while($data=mysql_fetch_assoc($que1)){
-		//redirect('.$data['ID_MENU'].');
-		if($data['CONTENT']==1)
-			$link='./?id='.$data['ID_MENU'];
-		else
-			$link='#';
-		
-		echo '<li class="treeview active">
-          <a href="'.$link.'">';
-        echo '<i class="fa '.$data['LOGO'].'"></i>'.$data['NAMA'];        
-        
+$que1=mysql_query("SELECT * FROM MENU WHERE LEVEL='1' AND ID_MENU>0 ORDER BY URUTAN ASC");
+while($data=mysql_fetch_assoc($que1)){
+	//redirect('.$data['ID_MENU'].');
+	if($data['CONTENT']==1)
+		$link='./?id='.$data['ID_MENU'];
+	else
+		$link='#';
+	
+	echo '
+	<li class="treeview active">
+    	<a href="'.$link.'">';
+		echo '
+			<i class="fa '.$data['LOGO'].'"></i><span> '.$data['NAMA'].'</span>';        
+	
 		if($data['CONTENT']==0){
-			echo '<span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>';
+			echo '
+			<span class="pull-right-container">
+	        	
+			</span>';
 		}
-        echo '</a>';
-        $max=mysql_fetch_assoc(mysql_query("SELECT MAX(LEVEL) AS LV FROM MENU"));
-        $max=$max['LV'];
-        
-        menu($data['CONTENT'], 2, $data['ID_MENU']);
-		
-		echo '</li>';
-	}
+		echo '
+		</a>';
+    $max=mysql_fetch_assoc(mysql_query("SELECT MAX(LEVEL) AS LV FROM MENU"));
+	$max=$max['LV'];
+    menu($data['CONTENT'], 2, $data['ID_MENU']);
+	echo '
+	</li>';
+}
+
 ?>
       </ul>
     </section>
@@ -240,6 +288,24 @@ if(isset($_REQUEST['id'])){
 		}
 		else if($datafile['JENIS']=="gbr"){
 			echo "<img src='data/gbr/".$datafile['URL']."' class='gbr'/><br><br>";
+//			echo '<img class="myImg" src="data/pdf/'.$datafile['URL'].'" alt="Trolltunga, Norway" width="300" height="200">
+//				<!-- The Modal -->
+//				<div id="myModal'.$datafile['URL'].'" class="modal">
+//				
+//				  <!-- The Close Button -->
+//				  <span class="close" onclick="document.getElementById(\'myModal'.$datafile['URL'].'\').style.display=\'none\'">&times;</span>
+//				
+//				  <!-- Modal Content (The Image) -->
+//				  <img class="modal-content" class="img01">
+//				
+//				  <!-- Modal Caption (Image Text) -->
+//				  <div class="caption"></div>
+//				</div>';
+		}
+		else if($datafile['JENIS']=="html"){
+			echo "<br><br>";
+			include "data/html/".$datafile['URL'];
+			echo "<br><br>";
 //			echo '<img class="myImg" src="data/pdf/'.$datafile['URL'].'" alt="Trolltunga, Norway" width="300" height="200">
 //				<!-- The Modal -->
 //				<div id="myModal'.$datafile['URL'].'" class="modal">
@@ -340,5 +406,6 @@ else{
 <script src="dist/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
+</style>
 </body>
 </html>

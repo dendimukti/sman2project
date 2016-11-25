@@ -38,7 +38,7 @@ if(isset($login)){
         </div>
         <!-- /.col -->
         <div class="col-xs-4">
-          <input type="submit" value="Sign in" class="btn btn-primary btn-block btn-flat" name="login">
+          <input type="submit" value="Sign in" class="btn btn-success btn-block btn-flat" name="login">
         </div>
         <!-- /.col -->
       </div>

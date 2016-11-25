@@ -36,6 +36,11 @@
 		$parent=$data['PARENT'];
 		$content=$data['CONTENT'];
 		$ket=$data['KET'];
+		
+		$quepar=mysql_query("SELECT * FROM MENU WHERE PARENT='$idmenu'");
+		$jumChild=mysql_num_rows($quepar);
+		$statContent="";
+		if($jumChild>0)	$statContent="disabled";
 	}
 	
 ?>
@@ -87,7 +92,7 @@
 	  </div>
 	  <div class="form-group">
 	    <label for="cbcontent">Konten</label>
-			<select class="form-control" name="cbcontent" id="cbcontent" onchange="pakaikonten(this.value, <?php echo $idmenu;?>)">
+			<select class="form-control" name="cbcontent" id="cbcontent" onchange="pakaikonten(this.value, <?php echo $idmenu;?>)" <?php echo $statContent;?>>
 				<option value="0">Tidak</option>
 				<option value="1" <?php echo ($content==1)?'selected':''; ?>>Ya</option>
 			</select> 

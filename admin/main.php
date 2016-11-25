@@ -12,7 +12,11 @@ function delfiles($del){
 		}
 		else if($datafile['JENIS']=="gbr"){
 			$file_to_delete = '../data/gbr/'.$datafile['URL'];
-			unlink($file_to_delete);							
+			unlink($file_to_delete);
+		}					
+		else if($datafile['JENIS']=="html"){
+			$file_to_delete = '../data/html/'.$datafile['URL'];
+			unlink($file_to_delete);
 		}					
 	}
 	mysql_query("DELETE FROM DATA_FILES WHERE ID_MENU='$del'");
@@ -153,6 +157,21 @@ if(isset($_POST['addmenu'])){
 						$confirm.="\n1 Video failed to upload,";
 				    }
 				}					
+				else if($jns=="html"){
+					$url=acak(10,"html");
+					$target_dir = "../data/html/";
+					$target_file = $target_dir . basename($data);
+					$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+				    $check = getimagesize($tmp_name);
+				    if($imageFileType=="html") {
+				    	$url.=".".$imageFileType;
+				        move_uploaded_file($tmp_name, $target_dir.$url);
+				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'html', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
+						$confirm.="\n1 HTML have been uploaded,";
+				    } else {
+						$confirm.="\n1 HTML failed to upload,";
+				    }
+				}					
 				else if($jns=="teks"){
 				    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
 					$confirm.="\n1 text data have been uploaded,";
@@ -261,6 +280,21 @@ if(isset($_POST['editmenu'])){
 			    	$url.=".".$imageFileType;
 			        move_uploaded_file($tmp_name, $target_dir.$url);
 			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+					$confirm.="\n1 Video have been uploaded,";
+			    } else {
+					$confirm.="\n1 Video failed to upload,";
+			    }
+			}					
+			else if($jns=="html"){
+				$url=acak(10,"html");
+				$target_dir = "../data/html/";
+				$target_file = $target_dir . basename($data);
+				$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			    $check = getimagesize($tmp_name);
+			    if($imageFileType=="html") {
+			    	$url.=".".$imageFileType;
+			        move_uploaded_file($tmp_name, $target_dir.$url);
+			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'html', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
 					$confirm.="\n1 Video have been uploaded,";
 			    } else {
 					$confirm.="\n1 Video failed to upload,";

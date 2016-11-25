@@ -73,6 +73,25 @@
 					    <input type='text' class='form-control' name='desc[]' placeholder='Deskripsi'>
 					  </div>";
 			}
+			else if($jenis=='html'){
+//				echo "Nama Video: <input type='text' name='name[]'><br>
+//				<input type='hidden' name='jenis[]' value='vid'>
+//				Data Video: <input type='file'' name='data[]' accept='video/*'>
+//				Deskripsi Video: <input type='text' name='desc[]' size='30'><br>";
+				echo "<div class='form-group'>
+					    <label>Nama HTML:</label>
+					    <input type='text' class='form-control' name='name[]' placeholder='Nama'>
+					  </div>					
+					  <input type='hidden' name='jenis[]' value='html'>
+					  <div class='form-group'>
+					    <label>File HTML</label>
+					    <input type='file' name='data[]' accept='.html'>
+					  </div>					
+					  <div class='form-group'>
+					    <label>Deskripsi HTML:</label>
+					    <input type='text' class='form-control' name='desc[]' placeholder='Deskripsi'>
+					  </div>";
+			}
 			//, <?php echo $jenis; ? >, 0
 		?>
 		</td>
