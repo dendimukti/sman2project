@@ -17,7 +17,11 @@
 			else if($jenis=="gbr"){
 				$file_to_delete = '../data/gbr/'.$datafile['URL'];
 				unlink($file_to_delete);							
-			}					
+			}
+			else if($jenis=="html"){
+				$file_to_delete = '../data/html/'.$datafile['URL'];
+				unlink($file_to_delete);							
+			}
 		}
 		mysql_query("DELETE FROM DATA_FILES WHERE ID_FILES='$del'");
 	}

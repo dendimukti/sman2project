@@ -273,52 +273,16 @@ if(isset($_REQUEST['id'])){
 			echo "<br><br>";
 		}
 		else if($datafile['JENIS']=="pdf"){
-//			echo '<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">';
-//			echo '<object data="data/pdf/'.$datafile['URL'].'" type="application/pdf"  width="100%" height="750">
-//					<embed src="data/pdf/'.$datafile['URL'].'" width="100%" height="750" type="application/pdf"/>
-//				</object>
-//			</a>';
-
-//			echo '<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-//				<input type="button" class="btn btn-success" value="Full Screen" onclick="changeval(this.value)"/>
-//				</a>';
 			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="100%" height="750" type="application/pdf"/>';
-
 			echo '<br><br>';
 		}
 		else if($datafile['JENIS']=="gbr"){
 			echo "<img src='data/gbr/".$datafile['URL']."' class='gbr'/><br><br>";
-//			echo '<img class="myImg" src="data/pdf/'.$datafile['URL'].'" alt="Trolltunga, Norway" width="300" height="200">
-//				<!-- The Modal -->
-//				<div id="myModal'.$datafile['URL'].'" class="modal">
-//				
-//				  <!-- The Close Button -->
-//				  <span class="close" onclick="document.getElementById(\'myModal'.$datafile['URL'].'\').style.display=\'none\'">&times;</span>
-//				
-//				  <!-- Modal Content (The Image) -->
-//				  <img class="modal-content" class="img01">
-//				
-//				  <!-- Modal Caption (Image Text) -->
-//				  <div class="caption"></div>
-//				</div>';
 		}
 		else if($datafile['JENIS']=="html"){
-			echo "<br><br>";
+			echo "<br><br><div>";
 			include "data/html/".$datafile['URL'];
-			echo "<br><br>";
-//			echo '<img class="myImg" src="data/pdf/'.$datafile['URL'].'" alt="Trolltunga, Norway" width="300" height="200">
-//				<!-- The Modal -->
-//				<div id="myModal'.$datafile['URL'].'" class="modal">
-//				
-//				  <!-- The Close Button -->
-//				  <span class="close" onclick="document.getElementById(\'myModal'.$datafile['URL'].'\').style.display=\'none\'">&times;</span>
-//				
-//				  <!-- Modal Content (The Image) -->
-//				  <img class="modal-content" class="img01">
-//				
-//				  <!-- Modal Caption (Image Text) -->
-//				  <div class="caption"></div>
-//				</div>';
+			echo "</div><br><br>";
 		}
 	}              
 }
