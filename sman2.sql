@@ -29,9 +29,11 @@ CREATE TABLE `data_files` (
   `KET` text,
   `URUTAN` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID_FILES`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
 
 /*Data for the table `data_files` */
+
+insert  into `data_files`(`ID_FILES`,`JENIS`,`ID_MENU`,`NAMA`,`URL`,`KET`,`URUTAN`) values (66,'pdf',1,'Profil Sekolah','7fdg23or6n.pdf','Profil Sekolah',1),(67,'pdf',45,'physics','5i4s3zigu6.pdf','physics',1),(68,'pdf',46,'Kalender Pendidikan','ahfr58ardj.pdf','Kalender Pendidikan',1),(69,'gbr',1,'anonim','q278kp5rz4.png','',2),(70,'vid',1,'workout 9gag','kkopzrwabx.mp4','',3);
 
 /*Table structure for table `menu` */
 
@@ -48,11 +50,11 @@ CREATE TABLE `menu` (
   `URUTAN` int(11) DEFAULT NULL,
   `KET` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`ID_MENU`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 /*Data for the table `menu` */
 
-insert  into `menu`(`ID_MENU`,`NAMA`,`LOGO`,`LEVEL`,`PARENT`,`CONTENT`,`JENIS`,`URUTAN`,`KET`) values (-1,'Uncategorized','fa-home',1,0,0,'',999,''),(1,'Profil Sekolah','fa-university',1,0,1,'',3,''),(2,'Dokumen','fa-file-text',1,0,0,'',4,''),(3,'Kegiatan Sekolah','fa-bell',1,0,0,'',5,''),(4,'Kurikulum','fa-folder-o',2,2,0,'',1,''),(5,'HUMAS','fa-folder-o',2,2,0,'',2,''),(6,'SARPRAS','fa-folder-o',2,2,0,'',3,''),(7,'Kesiswaan','fa-folder-o',2,2,0,'',4,''),(8,'RPP','fa-folder-o',3,4,0,'',1,''),(9,'Silabus','fa-folder-o',3,4,0,'',2,'');
+insert  into `menu`(`ID_MENU`,`NAMA`,`LOGO`,`LEVEL`,`PARENT`,`CONTENT`,`JENIS`,`URUTAN`,`KET`) values (-1,'Uncategorized','fa-home',1,0,0,'',999,''),(1,'Profil Sekolah','fa-home',1,0,1,'',1,''),(2,'Dokumen','fa-file-text',1,0,0,'',2,''),(3,'Kegiatan Sekolah','fa-bell',1,0,0,'',3,''),(4,'Kurikulum','fa-folder-o',2,2,0,'',1,''),(5,'HUMAS','fa-folder-o',2,2,0,'',2,''),(6,'SARPRAS','fa-folder-o',2,2,0,'',3,''),(7,'Kesiswaan','fa-folder-o',2,2,0,'',4,''),(8,'RPP','fa-folder-o',3,4,0,'',1,''),(9,'Silabus','fa-folder-o',3,4,0,'',2,''),(45,'Fisika','fa-file',4,8,1,'',2,''),(46,'Kalender Pendidikan','fa-file',3,7,1,'',3,'');
 
 /*Table structure for table `user` */
 

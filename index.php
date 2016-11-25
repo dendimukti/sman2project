@@ -95,6 +95,7 @@
 	    width: 250px;
 	    left: 50px;
 	}
+
 </style>
 
 <script type="text/javascript">
@@ -280,7 +281,7 @@ if(isset($_REQUEST['id'])){
 			echo "<img src='data/gbr/".$datafile['URL']."' class='gbr'/><br><br>";
 		}
 		else if($datafile['JENIS']=="html"){
-			echo "<br><br><div>";
+			echo "<br><br><div class='rst'>";
 			include "data/html/".$datafile['URL'];
 			echo "</div><br><br>";
 		}
