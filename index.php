@@ -2,7 +2,7 @@
 	include "config/conn.php";
 //anim@inagata.com
 //an46smart@gmail.com	
-
+//	mkdir("data	/a/b/c", 0700, true);
 ?>
 <!DOCTYPE html>
 <html>
@@ -264,26 +264,38 @@ if(isset($_REQUEST['id'])){
 	$jenis="teks";
 	while($datafile=mysql_fetch_assoc($que)){
 		if($datafile['JENIS']=="teks"){
-			echo " ".$datafile['KET']."<br><br>";
+			echo "<br>";
+			echo " ".$datafile['KET']."<br><br><br>";
 		}
 		else if($datafile['JENIS']=="vid"){
+			echo "<h3>".$datafile['NAMA']."</h3>";
 			echo '<video controls>
 					  <source src="data/vid/'.$datafile['URL'].'" type="video/mp4">
 					Your browser does not support the video tag.
 				  </video> ';
-			echo "<br><br>";
+			echo "<br><br><br>";
 		}
 		else if($datafile['JENIS']=="pdf"){
+			echo "<h3>".$datafile['NAMA']."</h3>";
 			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="100%" height="750" type="application/pdf"/>';
-			echo '<br><br>';
+			echo '<br><br><br>';
 		}
 		else if($datafile['JENIS']=="gbr"){
-			echo "<img src='data/gbr/".$datafile['URL']."' class='gbr'/><br><br>";
+			echo "<h3>".$datafile['NAMA']."</h3>";
+			echo "<img src='data/gbr/".$datafile['URL']."' class='gbr'/>
+			<br><br><br>";
 		}
 		else if($datafile['JENIS']=="html"){
-			echo "<br><br><div class='rst'>";
+			echo "<h3>".$datafile['NAMA']."</h3>";
+			echo "<div class='rst'>";
 			include "data/html/".$datafile['URL'];
-			echo "</div><br><br>";
+			echo "</div><br><br><br>";
+		}
+		else if($datafile['JENIS']=="flash"){
+			echo "<h3>".$datafile['NAMA']."</h3>";
+			echo '
+			<object width="800" height="600" data="data/flash/'.$datafile['URL'].'"></object>
+			<br><br>';
 		}
 	}              
 }

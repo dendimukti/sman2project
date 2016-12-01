@@ -18,6 +18,10 @@ function delfiles($del){
 			$file_to_delete = '../data/html/'.$datafile['URL'];
 			unlink($file_to_delete);
 		}					
+		else if($datafile['JENIS']=="flash"){
+			$file_to_delete = '../data/flash/'.$datafile['URL'];
+			unlink($file_to_delete);
+		}
 	}
 	mysql_query("DELETE FROM DATA_FILES WHERE ID_MENU='$del'");
 }
@@ -172,6 +176,21 @@ if(isset($_POST['addmenu'])){
 						$confirm.="\n1 HTML failed to upload,";
 				    }
 				}					
+				else if($jns=="flash"){
+					$url=acak(10,"flash");
+					$target_dir = "../data/flash/";
+					$target_file = $target_dir . basename($data);
+					$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+				    $check = getimagesize($tmp_name);
+				    if($imageFileType=="swf") {
+				    	$url.=".".$imageFileType;
+				        move_uploaded_file($tmp_name, $target_dir.$url);
+				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'flash', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
+						$confirm.="\n1 Flash have been uploaded,";
+				    } else {
+						$confirm.="\n1 Flash failed to upload,";
+				    }
+				}
 				else if($jns=="teks"){
 				    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
 					$confirm.="\n1 text data have been uploaded,";
@@ -295,11 +314,26 @@ if(isset($_POST['editmenu'])){
 			    	$url.=".".$imageFileType;
 			        move_uploaded_file($tmp_name, $target_dir.$url);
 			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'html', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
-					$confirm.="\n1 Video have been uploaded,";
+					$confirm.="\n1 HTML have been uploaded,";
 			    } else {
-					$confirm.="\n1 Video failed to upload,";
+					$confirm.="\n1 HTML failed to upload,";
 			    }
 			}					
+			else if($jns=="flash"){
+				$url=acak(10,"flash");
+				$target_dir = "../data/flash/";
+				$target_file = $target_dir . basename($data);
+				$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			    $check = getimagesize($tmp_name);
+			    if($imageFileType=="swf") {
+			    	$url.=".".$imageFileType;
+			        move_uploaded_file($tmp_name, $target_dir.$url);
+			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'flash', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+					$confirm.="\n1 Flash have been uploaded,";
+			    } else {
+					$confirm.="\n1 Flash failed to upload,";
+			    }
+			}
 			else if($jns=="teks"){
 			    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($urutan)."')");
 				$confirm.="\n1 text data have been uploaded,";

@@ -8,10 +8,11 @@ echo "
 		<th witdh='70%'>
 			<select name='jeniskonten' id='jeniskonten' class='form-control'>
 				<option value='teks'>Teks</option>
+				<option value='html'>Html</option>
+				<option value='flash'>Flash</option>
 				<option value='pdf'>PDF</option>
 				<option value='gbr'>Gambar</option>
 				<option value='vid'>Video</option>
-				<option value='html'>Html</option>
 			</select>
 		</th>
 		<th witdh='30%'>
@@ -40,6 +41,9 @@ if($idmenu>0){
 		}
 		else if($datafile['JENIS']=="html"){
 			echo " <a href='../data/html/".$datafile['URL']."'>(HTML) ".$datafile['NAMA']."</a><br>";
+		}
+		else if($datafile['JENIS']=="flash"){
+			echo " <a href='../data/flash/".$datafile['URL']."'>(FLASH) ".$datafile['NAMA']."</a><br>";
 		}
 		
 		echo '</td>

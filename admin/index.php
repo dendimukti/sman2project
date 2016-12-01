@@ -53,6 +53,9 @@
 		else if($tipe=="html"){
 			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".html'"));
 		}
+		else if($tipe=="flash"){
+			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".swf'"));
+		}
 				
 		if($data1>0){
 			acak($jum, $tipe);

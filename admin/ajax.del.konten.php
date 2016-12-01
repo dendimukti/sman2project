@@ -22,6 +22,10 @@
 				$file_to_delete = '../data/html/'.$datafile['URL'];
 				unlink($file_to_delete);							
 			}
+			else if($jenis=="flash"){
+				$file_to_delete = '../data/flash/'.$datafile['URL'];
+				unlink($file_to_delete);							
+			}
 		}
 		mysql_query("DELETE FROM DATA_FILES WHERE ID_FILES='$del'");
 	}

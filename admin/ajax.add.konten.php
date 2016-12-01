@@ -3,11 +3,6 @@
 		<?php
 			$jenis=$_GET['jenis'];
 			if($jenis=='teks'){
-//				echo "<input type='hidden' name='name[]' value=''>
-//				<input type='hidden' name='jenis[]' value='teks'>
-//				<input type='file' name='data[]' value='' style='display:none'>
-//				New Text:<br><textarea name='desc[]' class='mceEditor'></textarea><br>";
-
 				echo "<div class='form-group'>
 				<input type='hidden' name='name[]' value=''>
 				<input type='hidden' name='jenis[]' value='teks'>
@@ -16,10 +11,6 @@
 				</div>";
 			}
 			else if($jenis=='pdf'){
-//				echo "Nama Pdf: <input type='text' name='name[]'><br>
-//				<input type='hidden' name='jenis[]' value='pdf'>	
-//				Data Pdf: <input type='file'' name='data[]' accept='.pdf'>	
-//				Deskripsi Pdf: <input type='text' name='desc[]' size='30'><br>";
 				echo "<div class='form-group'>
 					    <label>Nama Pdf:</label>
 					    <input type='text' class='form-control' name='name[]' placeholder='Nama'>
@@ -36,10 +27,6 @@
 					  </div>";
 			}
 			else if($jenis=='gbr'){
-//				echo "Nama Gambar: <input type='text' name='name[]'><br>
-//				<input type='hidden' name='jenis[]' value='gbr'>
-//				Data Gambar: <input type='file'' name='data[]' accept='image/*'>
-//				Deskripsi Gambar: <input type='text' name='desc[]' size='30'><br>";
 				echo "<div class='form-group'>
 					    <label>Nama Gambar:</label>
 					    <input type='text' class='form-control' name='name[]' placeholder='Nama'>
@@ -55,10 +42,6 @@
 					  </div>";
 			}
 			else if($jenis=='vid'){
-//				echo "Nama Video: <input type='text' name='name[]'><br>
-//				<input type='hidden' name='jenis[]' value='vid'>
-//				Data Video: <input type='file'' name='data[]' accept='video/*'>
-//				Deskripsi Video: <input type='text' name='desc[]' size='30'><br>";
 				echo "<div class='form-group'>
 					    <label>Nama Video:</label>
 					    <input type='text' class='form-control' name='name[]' placeholder='Nama'>
@@ -74,10 +57,6 @@
 					  </div>";
 			}
 			else if($jenis=='html'){
-//				echo "Nama Video: <input type='text' name='name[]'><br>
-//				<input type='hidden' name='jenis[]' value='vid'>
-//				Data Video: <input type='file'' name='data[]' accept='video/*'>
-//				Deskripsi Video: <input type='text' name='desc[]' size='30'><br>";
 				echo "<div class='form-group'>
 					    <label>Nama HTML:</label>
 					    <input type='text' class='form-control' name='name[]' placeholder='Nama'>
@@ -89,6 +68,21 @@
 					  </div>					
 					  <div class='form-group'>
 					    <label>Deskripsi HTML:</label>
+					    <input type='text' class='form-control' name='desc[]' placeholder='Deskripsi'>
+					  </div>";
+			}
+			else if($jenis=='flash'){
+				echo "<div class='form-group'>
+					    <label>Nama Flash:</label>
+					    <input type='text' class='form-control' name='name[]' placeholder='Nama'>
+					  </div>					
+					  <input type='hidden' name='jenis[]' value='flash'>
+					  <div class='form-group'>
+					    <label>File Flash</label>
+					    <input type='file' name='data[]' accept='.swf'>
+					  </div>					
+					  <div class='form-group'>
+					    <label>Deskripsi Flash:</label>
 					    <input type='text' class='form-control' name='desc[]' placeholder='Deskripsi'>
 					  </div>";
 			}
