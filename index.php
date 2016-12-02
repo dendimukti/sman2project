@@ -9,6 +9,8 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" type="image/png" href="./data/favicon.png">
+  
   <title>SMAN 2 Malang</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -35,6 +37,30 @@
   <![endif]-->
   
   <style type="text/css">
+  	.teks{
+		font-family: Source Sans Pro;
+		font-size: 16px;
+		font-weight: 600;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1.5;
+		text-align: center;
+		color: #1e282c;
+		padding-left: 200px;
+		padding-right: 200px;
+	}
+	.judul{
+		width: 399px;
+		height: 24px;
+		font-family: Source Sans Pro;
+		font-size: 36px;
+		font-weight: 600;
+		font-style: normal;
+		font-stretch: normal;
+		line-height: 1;
+		text-align: center;
+		color: #1e282c;
+	}
     h1 {
       font-size: 44pt;
       font-weight: 600;
@@ -45,14 +71,12 @@
       opacity: 0.9;
       color: rgba(30, 40, 44, 0.9);
     }
-    .skin-blue .main-header .navbar {
-      background-color: #38db4e;
-    }
-    .skin-blue .main-header .logo {
-      background-color: #2c3b41;
+    .skin-green-light .main-header .logo {
+    	background-color: #e5f3e9;
+	    color: #000000;
     }
     .user-panel {
-      padding: 0;
+    	padding: 0;
     }
     .user-panel>.info {
         padding: 0;
@@ -60,13 +84,8 @@
         font-size: 10pt;
         margin-top: 8px;
     }
-    .skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu>li.active>a {
-	    color: #fff;
-	    background: #1e282c;
-	    border-left-color: #38db4e;
-	}
 	a{
-	    color: #38db4e; 
+	    color: #00a65a; 
 	    text-decoration: none;
 	}
 	a:hover{
@@ -95,7 +114,23 @@
 	    width: 250px;
 	    left: 50px;
 	}
-
+	
+    .skin-green-light .sidebar-menu>li:hover>a, .skin-green-light .sidebar-menu>li.active>a {
+	    color: #2c3b41;
+	    background: #f9fafc;
+	    border-left-color: #00a65a;
+	}
+	.skin-green-light .sidebar-menu>li>.treeview-menu {
+	    background: #e5f3e9;
+	}
+	.skin-green-light .main-header .logo:hover {
+	    background-color: #f9fafc;
+	}
+	/*
+	.skin-green-light .main-header .logo {
+	    background-color: #f9fafc;
+	    color: #000000;
+	}*/
 </style>
 
 <script type="text/javascript">
@@ -121,7 +156,7 @@ function changeval(data){
 }
 </script>
 </head>
-<body class="hold-transition skin-blue sidebar-mini" onclick="canceltimer()" onmouseover="canceltimer()" onkeypress="canceltimer()">
+<body class="hold-transition skin-green-light sidebar-mini" onclick="canceltimer()" onmouseover="canceltimer()" onkeypress="canceltimer()">
 <div class="wrapper">
   <header class="main-header">
     <!-- Logo -->
@@ -131,7 +166,7 @@ function changeval(data){
           <img src="data/logos2.png" style="width: 30px;" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p style="text-align: left;line-height: 19px;">Integrated Data Service<br><span style="color: #95adb7;font-size: 9pt;font-weight: 100;">SMA N 2 Malang</span></p>
+          <p style="text-align: left;line-height: 19px;color: #000000;">Integrated Data Service<br><span style="color: #000000;font-size: 9pt;font-weight: 100;">SMA N 2 Malang</span></p>
         </div>
       </div>
     </a>
@@ -170,13 +205,13 @@ function changeval(data){
         <li class="header">MAIN NAVIGATION</li>
 <?php
 
-function menu($content, $level, $parent){
-    $que2=mysql_query("SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
-    $jum=mysql_num_rows($que2);
+function menu($content, $level, $parent, $con){
+    $que2=mysqli_query($con, "SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
+    $jum=mysqli_num_rows($que2);
     if($jum>0){
 		echo '
 		<ul class="treeview-menu">';
-		while($data=mysql_fetch_assoc($que2)){
+		while($data=mysqli_fetch_assoc($que2)){
 			if($data['CONTENT']==1)
 				$link='./?id='.$data['ID_MENU'];
 			else
@@ -194,7 +229,7 @@ function menu($content, $level, $parent){
 					}
 			    echo '
 				</a>';
-				menu($data['CONTENT'], ($level+1), $data['ID_MENU']);
+				menu($data['CONTENT'], ($level+1), $data['ID_MENU'], $con);
 		    echo '
 			</li>';
 		}
@@ -204,8 +239,8 @@ function menu($content, $level, $parent){
 	return;	
 }
 	
-$que1=mysql_query("SELECT * FROM MENU WHERE LEVEL='1' AND ID_MENU>0 ORDER BY URUTAN ASC");
-while($data=mysql_fetch_assoc($que1)){
+$que1=mysqli_query($con, "SELECT * FROM MENU WHERE LEVEL='1' AND ID_MENU>0 ORDER BY URUTAN ASC");
+while($data=mysqli_fetch_assoc($que1)){
 	//redirect('.$data['ID_MENU'].');
 	if($data['CONTENT']==1)
 		$link='./?id='.$data['ID_MENU'];
@@ -226,9 +261,9 @@ while($data=mysql_fetch_assoc($que1)){
 		}
 		echo '
 		</a>';
-    $max=mysql_fetch_assoc(mysql_query("SELECT MAX(LEVEL) AS LV FROM MENU"));
+    $max=mysqli_fetch_assoc(mysqli_query($con, "SELECT MAX(LEVEL) AS LV FROM MENU"));
 	$max=$max['LV'];
-    menu($data['CONTENT'], 2, $data['ID_MENU']);
+    menu($data['CONTENT'], 2, $data['ID_MENU'], $con);
 	echo '
 	</li>';
 }
@@ -259,16 +294,16 @@ while($data=mysql_fetch_assoc($que1)){
 <?php
 if(isset($_REQUEST['id'])){
 	$idmenu=$_REQUEST['id'];
-	$que=mysql_query("SELECT * FROM DATA_FILES WHERE ID_MENU='$idmenu' ORDER BY URUTAN ASC");
+	$que=mysqli_query($con, "SELECT * FROM DATA_FILES WHERE ID_MENU='$idmenu' ORDER BY URUTAN ASC");
 	//echo "<h1>".."</h1>"
 	$jenis="teks";
-	while($datafile=mysql_fetch_assoc($que)){
+	while($datafile=mysqli_fetch_assoc($que)){
 		if($datafile['JENIS']=="teks"){
 			echo "<br>";
-			echo " ".$datafile['KET']."<br><br><br>";
+			echo "<div class='teks'>".$datafile['KET']."</div><br><br><br>";
 		}
 		else if($datafile['JENIS']=="vid"){
-			echo "<h3>".$datafile['NAMA']."</h3>";
+			echo "<div class='judul'>".$datafile['NAMA']."</div><br><br>";
 			echo '<video controls>
 					  <source src="data/vid/'.$datafile['URL'].'" type="video/mp4">
 					Your browser does not support the video tag.
@@ -276,23 +311,23 @@ if(isset($_REQUEST['id'])){
 			echo "<br><br><br>";
 		}
 		else if($datafile['JENIS']=="pdf"){
-			echo "<h3>".$datafile['NAMA']."</h3>";
+			echo "<div class='judul'>".$datafile['NAMA']."</div><br><br>";
 			echo '<embed src="data/pdf/'.$datafile['URL'].'" width="100%" height="750" type="application/pdf"/>';
 			echo '<br><br><br>';
 		}
 		else if($datafile['JENIS']=="gbr"){
-			echo "<h3>".$datafile['NAMA']."</h3>";
+			echo "<div class='judul'>".$datafile['NAMA']."</div><br><br>";
 			echo "<img src='data/gbr/".$datafile['URL']."' class='gbr'/>
 			<br><br><br>";
 		}
 		else if($datafile['JENIS']=="html"){
-			echo "<h3>".$datafile['NAMA']."</h3>";
+			echo "<div class='judul'>".$datafile['NAMA']."</div><br><br>";
 			echo "<div class='rst'>";
 			include "data/html/".$datafile['URL'];
 			echo "</div><br><br><br>";
 		}
 		else if($datafile['JENIS']=="flash"){
-			echo "<h3>".$datafile['NAMA']."</h3>";
+			echo "<div class='judul'>".$datafile['NAMA']."</div><br><br>";
 			echo '
 			<object width="800" height="600" data="data/flash/'.$datafile['URL'].'"></object>
 			<br><br>';
@@ -306,6 +341,7 @@ else{
 <h2>SMA NEGERI 2 MALANG</h2>
 <?php
 }
+mysqli_close($con);
 ?>
 </center>
             <!-- ./box-body -->

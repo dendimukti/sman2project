@@ -1,7 +1,7 @@
 <?php	
 extract($_POST);	
 if(isset($login)){
-	$dat=mysql_fetch_assoc(mysql_query("SELECT * FROM USER WHERE USN='$usn' AND PWD='$pwd' AND STATUS=1"));
+	$dat=mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM USER WHERE USN='$usn' AND PWD='$pwd' AND STATUS=1"));
 	if(!empty($dat['ID'])){
 		$_SESSION['LOGGED']=$dat['ID'];
 		echo "<script>document.location='./'</script>";

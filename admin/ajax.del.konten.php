@@ -4,8 +4,8 @@
 	$del=$_GET['id'];
 	$jenis=$_GET['jenis'];
 	if($del>0){
-		$que=mysql_query("SELECT URL FROM DATA_FILES WHERE ID_FILES='$del'");
-		while($datafile=mysql_fetch_assoc($que)){				
+		$que=mysqli_query($con, "SELECT URL FROM DATA_FILES WHERE ID_FILES='$del'");
+		while($datafile=mysqli_fetch_assoc($que)){				
 			if($jenis=="pdf"){
 				$file_to_delete = '../data/pdf/'.$datafile['URL'];
 				unlink($file_to_delete);						
@@ -27,7 +27,7 @@
 				unlink($file_to_delete);							
 			}
 		}
-		mysql_query("DELETE FROM DATA_FILES WHERE ID_FILES='$del'");
+		mysqli_query($con, "DELETE FROM DATA_FILES WHERE ID_FILES='$del'");
 	}
 	
 ?>

@@ -28,8 +28,8 @@
 			  </div>
 			</div>
 		</div>";
-		$que=mysql_query("SELECT * FROM MENU WHERE ID_MENU='$idmenu'");
-		$data=mysql_fetch_assoc($que);
+		$que=mysqli_query($con, "SELECT * FROM MENU WHERE ID_MENU='$idmenu'");
+		$data=mysqli_fetch_assoc($que);
 		$nama=$data['NAMA'];
 		$icon=$data['LOGO'];
 		$level=$data['LEVEL'];
@@ -37,8 +37,8 @@
 		$content=$data['CONTENT'];
 		$ket=$data['KET'];
 		
-		$quepar=mysql_query("SELECT * FROM MENU WHERE PARENT='$idmenu'");
-		$jumChild=mysql_num_rows($quepar);
+		$quepar=mysqli_query($con, "SELECT * FROM MENU WHERE PARENT='$idmenu'");
+		$jumChild=mysqli_num_rows($quepar);
 		$statContent="";
 		if($jumChild>0)	$statContent="disabled";
 	}
@@ -59,7 +59,7 @@
 	    <label for="cblevel">Pilih Level Menu</label>
 	    <select class="form-control" name="cblevel" id="cblevel" onchange="changeparent(this.value)">
 		<?php
-			$datalevel=mysql_fetch_assoc(mysql_query("SELECT MAX(LEVEL) AS LV FROM MENU WHERE CONTENT='0'"));
+			$datalevel=mysqli_fetch_assoc(mysqli_query($con, "SELECT MAX(LEVEL) AS LV FROM MENU WHERE CONTENT='0'"));
 			$datalevel=$datalevel['LV'];
 			for($i=1;$i<=$datalevel+1;$i++){
 				if($i==$level)
@@ -79,8 +79,8 @@
 	    <label for="cbparent">Pilih Induk</label>
 			<select class="form-control" name="cbparent" id="cbparent">
 			<?php
-				$queparent=mysql_query("SELECT ID_MENU, NAMA FROM MENU WHERE LEVEL='".($level-1)."'");
-				while($data=mysql_fetch_assoc($queparent)){
+				$queparent=mysqli_query($con, "SELECT ID_MENU, NAMA FROM MENU WHERE LEVEL='".($level-1)."'");
+				while($data=mysqli_fetch_assoc($queparent)){
 					if($data['ID_MENU']==$parent)
 						echo "<option value='".$data['ID_MENU']."' selected>".$data['NAMA']."</option>";
 					else

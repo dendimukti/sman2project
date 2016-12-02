@@ -1,7 +1,13 @@
 <?php
+function cekhtml($data){
+	$data=strip_tags($data);
+	$data=str_replace("'","\'",$data);
+	$data=str_replace('"','\"',$data);
+	return $data;
+}
 function delfiles($del){
-	$que=mysql_query("SELECT URL, JENIS FROM DATA_FILES WHERE ID_MENU='$del'");
-	while($datafile=mysql_fetch_assoc($que)){				
+	$que=mysqli_query($con ,"SELECT URL, JENIS FROM DATA_FILES WHERE ID_MENU='$del'");
+	while($datafile=mysqli_fetch_assoc($que)){				
 		if($datafile['JENIS']=="pdf"){
 			$file_to_delete = '../data/pdf/'.$datafile['URL'];
 			unlink($file_to_delete);						
@@ -23,67 +29,67 @@ function delfiles($del){
 			unlink($file_to_delete);
 		}
 	}
-	mysql_query("DELETE FROM DATA_FILES WHERE ID_MENU='$del'");
+	mysqli_query($con ,"DELETE FROM DATA_FILES WHERE ID_MENU='$del'");
 }
 extract($_GET);
 if(!empty($do)){		
-	$queid=mysql_query("SELECT LEVEL, PARENT, URUTAN FROM MENU WHERE ID_MENU='$id'");
-	$dataid=mysql_fetch_assoc($queid);
+	$queid=mysqli_query($con ,"SELECT LEVEL, PARENT, URUTAN FROM MENU WHERE ID_MENU='$id'");
+	$dataid=mysqli_fetch_assoc($queid);
 	$level=$dataid['LEVEL'];
 	$parent=$dataid['PARENT'];
 	$urutan=$dataid['URUTAN'];
 //		echo "level:".$level." - parent:".$parent." - urutan:".$urutan."<br>";
 	if($do=="up"){
-		$quedo=mysql_query("SELECT ID_MENU, URUTAN FROM MENU WHERE PARENT='$parent' AND LEVEL='$level' AND URUTAN<'$urutan' ORDER BY URUTAN DESC LIMIT 1");
-		$datado=mysql_fetch_assoc($quedo);
+		$quedo=mysqli_query($con ,"SELECT ID_MENU, URUTAN FROM MENU WHERE PARENT='$parent' AND LEVEL='$level' AND URUTAN<'$urutan' ORDER BY URUTAN DESC LIMIT 1");
+		$datado=mysqli_fetch_assoc($quedo);
 		$idup=$datado['ID_MENU'];
 		$urutanup=$datado['URUTAN'];
 //			echo "idup:".$idup." - urutanup:".$urutanup."<br>";
-		mysql_query("UPDATE MENU SET URUTAN='$urutan' WHERE ID_MENU='$idup'");
-		mysql_query("UPDATE MENU SET URUTAN='$urutanup' WHERE ID_MENU='$id'");
+		mysqli_query($con ,"UPDATE MENU SET URUTAN='$urutan' WHERE ID_MENU='$idup'");
+		mysqli_query($con ,"UPDATE MENU SET URUTAN='$urutanup' WHERE ID_MENU='$id'");
 	}
 	else if($do=="down"){			
-		$quedo=mysql_query("SELECT ID_MENU, URUTAN FROM MENU WHERE PARENT='$parent' AND LEVEL='$level' AND URUTAN>'$urutan' ORDER BY URUTAN ASC LIMIT 1");
-		$datado=mysql_fetch_assoc($quedo);
+		$quedo=mysqli_query($con ,"SELECT ID_MENU, URUTAN FROM MENU WHERE PARENT='$parent' AND LEVEL='$level' AND URUTAN>'$urutan' ORDER BY URUTAN ASC LIMIT 1");
+		$datado=mysqli_fetch_assoc($quedo);
 		$iddown=$datado['ID_MENU'];
 		$urutandown=$datado['URUTAN'];
 //			echo "iddown:".$iddown." - urutandown:".$urutandown."<br>";
-		mysql_query("UPDATE MENU SET URUTAN='$urutan' WHERE ID_MENU='$iddown'");
-		mysql_query("UPDATE MENU SET URUTAN='$urutandown' WHERE ID_MENU='$id'");
+		mysqli_query($con ,"UPDATE MENU SET URUTAN='$urutan' WHERE ID_MENU='$iddown'");
+		mysqli_query($con ,"UPDATE MENU SET URUTAN='$urutandown' WHERE ID_MENU='$id'");
 	}	
 	echo "<script>document.location='./';</script>";
 }
 	
 function movemenu($id_menu, $level){
 	$level=$level+1;
-	$queun=mysql_query("SELECT * FROM MENU WHERE PARENT='$id_menu'");
-	while($dataun=mysql_fetch_assoc($queun)){
+	$queun=mysqli_query($con ,"SELECT * FROM MENU WHERE PARENT='$id_menu'");
+	while($dataun=mysqli_fetch_assoc($queun)){
 		movemenu($dataun['ID_MENU'], ($level));			
 	}
-	mysql_query("UPDATE MENU SET LEVEL='$level' WHERE PARENT='$id_menu'");
+	mysqli_query($con ,"UPDATE MENU SET LEVEL='$level' WHERE PARENT='$id_menu'");
 }
 	
 if(!empty($del)){
-	$datadel=mysql_fetch_assoc(mysql_query("SELECT * FROM MENU WHERE ID_MENU='$del'"));
+	$datadel=mysqli_fetch_assoc(mysqli_query($con ,"SELECT * FROM MENU WHERE ID_MENU='$del'"));
 	if($datadel['CONTENT']>0){
-		mysql_query("DELETE FROM MENU WHERE ID_MENU='$del'");
+		mysqli_query($con ,"DELETE FROM MENU WHERE ID_MENU='$del'");
 		delfiles($del);			
 	}else{
-		mysql_query("DELETE FROM MENU WHERE ID_MENU='$del'");
+		mysqli_query($con ,"DELETE FROM MENU WHERE ID_MENU='$del'");
 		
-		$quemv=mysql_query("SELECT * FROM MENU WHERE PARENT='$del'");
-		while($datamv=mysql_fetch_assoc($quemv)){ 
+		$quemv=mysqli_query($con ,"SELECT * FROM MENU WHERE PARENT='$del'");
+		while($datamv=mysqli_fetch_assoc($quemv)){ 
 			movemenu($datamv['ID_MENU'], 2);
 		}
-		mysql_query("UPDATE MENU SET PARENT='-1', LEVEL='2' WHERE PARENT='$del'");
+		mysqli_query($con ,"UPDATE MENU SET PARENT='-1', LEVEL='2' WHERE PARENT='$del'");
 		
 	}
 	echo "<script>document.location='./';</script>";
 }
 	
 if(isset($_POST['addmenu'])){
-	$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
-	$urutan=mysql_fetch_assoc($queurutan);
+	$queurutan=mysqli_query($con ,"SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
+	$urutan=mysqli_fetch_assoc($queurutan);
 	$urutan=$urutan['NO']+1;
 	extract($_POST);		
 		
@@ -100,22 +106,25 @@ if(isset($_POST['addmenu'])){
 		echo "<script type='text/javascript'>alert('Nama Menu Harus Di Isi');</script>";
 	}else{
 		if($cbcontent==0){
-			mysql_query("INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
+			mysqli_query($con ,"INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
 		}else{
-			mysql_query("INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
-			$quedata=mysql_query("SELECT MAX(ID_MENU) AS ID FROM MENU");
-			$idmenu=mysql_fetch_assoc($quedata);
+			mysqli_query($con ,"INSERT INTO MENU VALUES ('','$title','$cbicon','$cblevel','$cbparent','$cbcontent','','$urutan','$ket')");
+			$quedata=mysqli_query($con ,"SELECT MAX(ID_MENU) AS ID FROM MENU");
+			$idmenu=mysqli_fetch_assoc($quedata);
 			$idmenu=$idmenu['ID'];
 			$confirm="";
 			for($i=0; $i<count($_POST['jenis']); $i++){
-				$jns = $_POST['jenis'][$i];
-				$name = $_POST['name'][$i];
-				$desc = $_POST['desc'][$i];
+				$jns = cekhtml($_POST['jenis'][$i]);
+				$name = cekhtml($_POST['name'][$i]);
+				$desc = cekhtml($_POST['desc'][$i]);
 				
-				if($jns!="teks"){
+				if($jns=="teks"){
+				    mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
+					$confirm.="\n1 text data have been uploaded,";
+				}else{
 					$data=$_FILES["data"]["name"][$i]; 
 					$tmp_name=$_FILES["data"]["tmp_name"][$i];
-				}					
+				}
 				if($jns=="pdf"){
 					$url=acak(10,"pdf");
 					$target_dir = "../data/pdf/";
@@ -125,7 +134,7 @@ if(isset($_POST['addmenu'])){
 				    if($imageFileType=="pdf") {
 				    	$url.=".".$imageFileType;
 				        move_uploaded_file($tmp_name, $target_dir.$url);
-				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'pdf', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
+				        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'pdf', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
 						$confirm.="\n1 PDF have been uploaded,";
 				    } else {
 						$confirm.="\n1 PDF failed to upload,";
@@ -140,7 +149,7 @@ if(isset($_POST['addmenu'])){
 				    if($check) {
 				    	$url.=".".$imageFileType;
 				        move_uploaded_file($tmp_name, $target_dir.$url);
-				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'gbr', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
+				        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'gbr', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
 						$confirm.="\n1 Image have been uploaded,";
 				    } else {
 						$confirm.="\n1 Image failed to upload,";
@@ -155,7 +164,7 @@ if(isset($_POST['addmenu'])){
 				    if($imageFileType=="mp4" || $imageFileType=="mpg" || $imageFileType=="mpeg" || $imageFileType=="avi" || $imageFileType=="flv") {
 				    	$url.=".".$imageFileType;
 				        move_uploaded_file($tmp_name, $target_dir.$url);
-				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
+				        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
 						$confirm.="\n1 Video have been uploaded,";
 				    } else {
 						$confirm.="\n1 Video failed to upload,";
@@ -170,7 +179,7 @@ if(isset($_POST['addmenu'])){
 				    if($imageFileType=="html") {
 				    	$url.=".".$imageFileType;
 				        move_uploaded_file($tmp_name, $target_dir.$url);
-				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'html', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
+				        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'html', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
 						$confirm.="\n1 HTML have been uploaded,";
 				    } else {
 						$confirm.="\n1 HTML failed to upload,";
@@ -185,15 +194,11 @@ if(isset($_POST['addmenu'])){
 				    if($imageFileType=="swf") {
 				    	$url.=".".$imageFileType;
 				        move_uploaded_file($tmp_name, $target_dir.$url);
-				        mysql_query("INSERT INTO DATA_FILES VALUES('', 'flash', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
+				        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'flash', '$idmenu', '$name', '$url', '$desc', '".($i+1)."')");
 						$confirm.="\n1 Flash have been uploaded,";
 				    } else {
 						$confirm.="\n1 Flash failed to upload,";
 				    }
-				}
-				else if($jns=="teks"){
-				    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
-					$confirm.="\n1 text data have been uploaded,";
 				}
 			}
 				//	alert('".$confirm."');
@@ -207,8 +212,8 @@ if(isset($_POST['editmenu'])){
 	extract($_POST);
 	$idmenu=$_POST['idmenu'];
 	
-	$queid=mysql_query("SELECT LEVEL, PARENT FROM MENU WHERE ID_MENU='$idmenu'");
-	$dataid=mysql_fetch_assoc($queid);
+	$queid=mysqli_query($con ,"SELECT LEVEL, PARENT FROM MENU WHERE ID_MENU='$idmenu'");
+	$dataid=mysqli_fetch_assoc($queid);
 	$level=$dataid['LEVEL'];
 	$parent=$dataid['PARENT'];
 				
@@ -224,41 +229,47 @@ if(isset($_POST['editmenu'])){
 	
 	if($level!=$cblevel){
 		$level=$cblevel+1;
-		$quemv=mysql_query("SELECT * FROM MENU WHERE PARENT='$idmenu'");
-		while($datamv=mysql_fetch_assoc($quemv)){
+		$quemv=mysqli_query($con ,"SELECT * FROM MENU WHERE PARENT='$idmenu'");
+		while($datamv=mysqli_fetch_assoc($quemv)){
 			movemenu($datamv['ID_MENU'], $level);
 		}
-		mysql_query("UPDATE MENU SET LEVEL='$level' WHERE PARENT='$idmenu'");
+		mysqli_query($con ,"UPDATE MENU SET LEVEL='$level' WHERE PARENT='$idmenu'");
 				
-		$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
-		$urutan=mysql_fetch_assoc($queurutan);
+		$queurutan=mysqli_query($con ,"SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
+		$urutan=mysqli_fetch_assoc($queurutan);
 		$urutan=$urutan['NO']+1;
-		mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', LEVEL='$cblevel', PARENT='$cbparent', URUTAN='$urutan', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
+		mysqli_query($con ,"UPDATE MENU SET NAMA='$title', LOGO='$cbicon', LEVEL='$cblevel', PARENT='$cbparent', URUTAN='$urutan', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
 	}else if(($level==$cblevel)&&($cbparent!=$parent)){
 		$urutan=0;
-		$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
-		$urutan=mysql_fetch_assoc($queurutan);
+		$queurutan=mysqli_query($con ,"SELECT MAX(URUTAN) AS NO FROM MENU WHERE PARENT='$cbparent' AND ID_MENU>0");
+		$urutan=mysqli_fetch_assoc($queurutan);
 		$urutan=$urutan['NO']+1;
-		mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', PARENT='$cbparent', CONTENT='$cbcontent', URUTAN='$urutan', KET='$ket' WHERE ID_MENU='$idmenu'");	
+		mysqli_query($con ,"UPDATE MENU SET NAMA='$title', LOGO='$cbicon', PARENT='$cbparent', CONTENT='$cbcontent', URUTAN='$urutan', KET='$ket' WHERE ID_MENU='$idmenu'");	
 	}else{
-		mysql_query("UPDATE MENU SET NAMA='$title', LOGO='$cbicon', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
+		mysqli_query($con ,"UPDATE MENU SET NAMA='$title', LOGO='$cbicon', CONTENT='$cbcontent', KET='$ket' WHERE ID_MENU='$idmenu'");
 	}
 		
 	if($cbcontent==0){
 		delfiles($idmenu);
 	}else{
-		$queurutan=mysql_query("SELECT MAX(URUTAN) AS NO FROM DATA_FILES WHERE ID_MENU='$idmenu'");
-		$urutan=mysql_fetch_assoc($queurutan);
+		$queurutan=mysqli_query($con ,"SELECT MAX(URUTAN) AS NO FROM DATA_FILES WHERE ID_MENU='$idmenu'");
+		$urutan=mysqli_fetch_assoc($queurutan);
 		$no=$urutan['NO'];
 		for($i=0; $i<count($_POST['jenis']); $i++){
-			$jns = $_POST['jenis'][$i];
-			$name = $_POST['name'][$i];
-			$desc = $_POST['desc'][$i];
+			$jns = cekhtml($_POST['jenis'][$i]);
+			$name = cekhtml($_POST['name'][$i]);
+			$desc = cekhtml($_POST['desc'][$i]);
 			$urutan=$no+$i+1;
-			if($jns!="teks"){
+			
+			if($jns=="teks"){
+			    mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($urutan)."')");
+				$confirm.="\n1 text data have been uploaded,<br>";
+				//$confirm.="\n1 INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($urutan)."')<br>";
+			}else{
 				$data=$_FILES["data"]["name"][$i]; 
 				$tmp_name=$_FILES["data"]["tmp_name"][$i];
 			}
+			
 			if($jns=="pdf"){
 				$url=acak(10,"pdf");
 				$target_dir = "../data/pdf/";
@@ -268,7 +279,7 @@ if(isset($_POST['editmenu'])){
 			    if($imageFileType=="pdf") {
 			    	$url.=".".$imageFileType;
 			        move_uploaded_file($tmp_name, $target_dir.$url);
-			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'pdf', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+			        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'pdf', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
 					$confirm.="\n1 PDF have been uploaded,";
 			    } else {
 					$confirm.="\n1 PDF failed to upload,";
@@ -283,7 +294,7 @@ if(isset($_POST['editmenu'])){
 			    if($check) {
 			    	$url.=".".$imageFileType;
 			        move_uploaded_file($tmp_name, $target_dir.$url);
-			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'gbr', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+			        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'gbr', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
 					$confirm.="\n1 Image have been uploaded,";
 			    } else {
 					$confirm.="\n1 Image failed to upload,";
@@ -298,12 +309,12 @@ if(isset($_POST['editmenu'])){
 			    if($imageFileType=="mp4" || $imageFileType=="mpg" || $imageFileType=="mpeg" || $imageFileType=="avi" || $imageFileType=="flv") {
 			    	$url.=".".$imageFileType;
 			        move_uploaded_file($tmp_name, $target_dir.$url);
-			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+			        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'vid', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
 					$confirm.="\n1 Video have been uploaded,";
 			    } else {
 					$confirm.="\n1 Video failed to upload,";
 			    }
-			}					
+			}
 			else if($jns=="html"){
 				$url=acak(10,"html");
 				$target_dir = "../data/html/";
@@ -313,12 +324,12 @@ if(isset($_POST['editmenu'])){
 			    if($imageFileType=="html") {
 			    	$url.=".".$imageFileType;
 			        move_uploaded_file($tmp_name, $target_dir.$url);
-			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'html', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+			        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'html', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
 					$confirm.="\n1 HTML have been uploaded,";
 			    } else {
 					$confirm.="\n1 HTML failed to upload,";
 			    }
-			}					
+			}
 			else if($jns=="flash"){
 				$url=acak(10,"flash");
 				$target_dir = "../data/flash/";
@@ -328,19 +339,17 @@ if(isset($_POST['editmenu'])){
 			    if($imageFileType=="swf") {
 			    	$url.=".".$imageFileType;
 			        move_uploaded_file($tmp_name, $target_dir.$url);
-			        mysql_query("INSERT INTO DATA_FILES VALUES('', 'flash', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
+			        mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'flash', '$idmenu', '$name', '$url', '$desc', '".($urutan)."')");
 					$confirm.="\n1 Flash have been uploaded,";
 			    } else {
 					$confirm.="\n1 Flash failed to upload,";
 			    }
 			}
-			else if($jns=="teks"){
-			    mysql_query("INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($urutan)."')");
-				$confirm.="\n1 text data have been uploaded,";
-			}
 		}
 			//echo "<script>alert('".$confirm."');</script>";				
 	}
+	//echo $confirm."<br>";
+	//print_r($_POST['jenis']);
 	echo "<script>document.location='./?id=".$idmenu."';</script>";	
 }
 ?>
@@ -488,13 +497,13 @@ if(isset($_POST['editmenu'])){
       <!-- sidebar menu: : style can be found in sidebar.less -->
 
 <?php
-	function menu($content, $level, $parent){
-	    $que2=mysql_query("SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
-	    $jum=mysql_num_rows($que2);	
+	function menu($content, $level, $parent, $con){
+	    $que2=mysqli_query($con ,"SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
+	    $jum=mysqli_num_rows($que2);	
 	    if($jum>0){
 			echo '<ul class="treeview-menu">';
 			$n=1;
-			while($data=mysql_fetch_assoc($que2)){				
+			while($data=mysqli_fetch_assoc($que2)){				
 				echo '<li class="active"><a href="#">
 				<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
 						
@@ -513,7 +522,7 @@ if(isset($_POST['editmenu'])){
 					// echo '<span class="pull-right-container">
 			  //       	<i class="fa fa-angle-left pull-right"></i>
 			  //           </span>';
-					menu($data['CONTENT'], ($level+1), $data['ID_MENU']);
+					menu($data['CONTENT'], ($level+1), $data['ID_MENU'], $con);
 				}
 				echo '</a></i>';
 				$n++;
@@ -533,10 +542,10 @@ if(isset($_POST['editmenu'])){
 	        </div>
 		</li>
 <?php
-	$que1=mysql_query("SELECT * FROM MENU WHERE LEVEL='1' ORDER BY URUTAN ASC");
-	$tot=mysql_num_rows($que1);
+	$que1=mysqli_query($con ,"SELECT * FROM MENU WHERE LEVEL='1' ORDER BY URUTAN ASC");
+	$tot=mysqli_num_rows($que1);
 	$n=1;
-	while($data=mysql_fetch_assoc($que1)){
+	while($data=mysqli_fetch_assoc($que1)){
 		echo '
 		<li class="treeview active">
 			<a href="#">
@@ -560,9 +569,9 @@ if(isset($_POST['editmenu'])){
    //          </span>';  
         }
         echo '</a>';        
-	    $max=mysql_fetch_assoc(mysql_query("SELECT MAX(LEVEL) AS LV FROM MENU"));
+	    $max=mysqli_fetch_assoc(mysqli_query($con ,"SELECT MAX(LEVEL) AS LV FROM MENU"));
 		$max=$max['LV'];        
-        menu($data['CONTENT'], 2, $data['ID_MENU']);
+        menu($data['CONTENT'], 2, $data['ID_MENU'], $con);
 		echo '</li>';
 		$n++;
 	}
@@ -585,8 +594,8 @@ if(isset($_POST['editmenu'])){
 	$idmenu="";
 	if(isset($_REQUEST['id'])){
 		$idmenu=$_REQUEST['id'];
-		$que=mysql_query("SELECT * FROM MENU WHERE ID_MENU='$idmenu'");
-		$data=mysql_fetch_assoc($que);
+		$que=mysqli_query($con ,"SELECT * FROM MENU WHERE ID_MENU='$idmenu'");
+		$data=mysqli_fetch_assoc($que);
 		$nama=$data['NAMA'];
 		$icon=$data['LOGO'];
 		$level=$data['LEVEL'];
@@ -596,7 +605,6 @@ if(isset($_POST['editmenu'])){
 	}			  
 //	echo $nama;			  
 ?>
-</h3>
             <!-- /.box-header -->
             <div class="box-body">
               <div class="row">               

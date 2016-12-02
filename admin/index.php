@@ -1,5 +1,7 @@
 <html>
 	<head>
+	
+  <link rel="icon" type="image/png" href="../data/favicon.png">
 <link href="../jquery-ui-1.8.1.custom/css/custom-theme/jquery-ui-1.8.1.custom.css" rel="stylesheet" type="text/css" />
 <script src="../jquery-ui-1.8.1.custom/js/jquery-1.4.2.min.js"></script>
 <script src="../jquery-ui-1.8.1.custom/js/jquery-ui-1.8.1.custom.min.js"></script>
@@ -42,19 +44,19 @@
 			$data .= $dat[rand(0,35)];
 		}
 		if($tipe=="gbr"){
-			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".jpg' OR URL_GBR'".$data.".jpeg' OR URL_GBR'".$data.".png'"));
+			$data1=mysqli_num_rows(mysqli_query($con, "SELECT URL FROM DATA_FILES WHERE URL'".$data.".jpg' OR URL_GBR'".$data.".jpeg' OR URL_GBR'".$data.".png'"));
 		}
 		else if($tipe=="pdf"){
-			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".pdf'"));
+			$data1=mysqli_num_rows(mysqli_query($con, "SELECT URL FROM DATA_FILES WHERE URL'".$data.".pdf'"));
 		}
 		else if($tipe=="vid"){
-			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".mp4'"));
+			$data1=mysqli_num_rows(mysqli_query($con, "SELECT URL FROM DATA_FILES WHERE URL'".$data.".mp4'"));
 		}
 		else if($tipe=="html"){
-			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".html'"));
+			$data1=mysqli_num_rows(mysqli_query($con, "SELECT URL FROM DATA_FILES WHERE URL'".$data.".html'"));
 		}
 		else if($tipe=="flash"){
-			$data1=mysql_num_rows(mysql_query("SELECT URL FROM DATA_FILES WHERE URL'".$data.".swf'"));
+			$data1=mysqli_num_rows(mysqli_query($con, "SELECT URL FROM DATA_FILES WHERE URL'".$data.".swf'"));
 		}
 				
 		if($data1>0){

@@ -20,11 +20,11 @@ echo "
 		</th>
 	</tr>";
 if($idmenu>0){
-	$que=mysql_query("SELECT * FROM DATA_FILES WHERE ID_MENU='$idmenu' ORDER BY URUTAN ASC");
+	$que=mysqli_query($con, "SELECT * FROM DATA_FILES WHERE ID_MENU='$idmenu' ORDER BY URUTAN ASC");
 	$jenis="teks";
-	$tot=mysql_num_rows($que);
+	$tot=mysqli_num_rows($que);
 	$n=1;
-	while($datafile=mysql_fetch_assoc($que)){
+	while($datafile=mysqli_fetch_assoc($que)){
 		echo '<tr align="center">
 		<td align="left">';
 		if($datafile['JENIS']=="teks"){
