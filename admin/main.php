@@ -5,25 +5,25 @@ function cekhtml($data){
 	$data=str_replace('"','\"',$data);
 	return $data;
 }
-function delfiles($del){
+function delfiles($del, $con){
 	$que=mysqli_query($con ,"SELECT URL, JENIS FROM DATA_FILES WHERE ID_MENU='$del'");
 	while($datafile=mysqli_fetch_assoc($que)){				
 		if($datafile['JENIS']=="pdf"){
 			$file_to_delete = '../data/pdf/'.$datafile['URL'];
-			unlink($file_to_delete);						
+			unlink($file_to_delete);
 		}
 		else if($datafile['JENIS']=="vid"){
 			$file_to_delete = '../data/vid/'.$datafile['URL'];
-			unlink($file_to_delete);							
+			unlink($file_to_delete);
 		}
 		else if($datafile['JENIS']=="gbr"){
 			$file_to_delete = '../data/gbr/'.$datafile['URL'];
 			unlink($file_to_delete);
-		}					
+		}
 		else if($datafile['JENIS']=="html"){
 			$file_to_delete = '../data/html/'.$datafile['URL'];
 			unlink($file_to_delete);
-		}					
+		}
 		else if($datafile['JENIS']=="flash"){
 			$file_to_delete = '../data/flash/'.$datafile['URL'];
 			unlink($file_to_delete);
@@ -60,11 +60,11 @@ if(!empty($do)){
 	echo "<script>document.location='./';</script>";
 }
 	
-function movemenu($id_menu, $level){
+function movemenu($id_menu, $level, $con){
 	$level=$level+1;
 	$queun=mysqli_query($con ,"SELECT * FROM MENU WHERE PARENT='$id_menu'");
 	while($dataun=mysqli_fetch_assoc($queun)){
-		movemenu($dataun['ID_MENU'], ($level));			
+		movemenu($dataun['ID_MENU'], ($level), $con);			
 	}
 	mysqli_query($con ,"UPDATE MENU SET LEVEL='$level' WHERE PARENT='$id_menu'");
 }
@@ -73,13 +73,13 @@ if(!empty($del)){
 	$datadel=mysqli_fetch_assoc(mysqli_query($con ,"SELECT * FROM MENU WHERE ID_MENU='$del'"));
 	if($datadel['CONTENT']>0){
 		mysqli_query($con ,"DELETE FROM MENU WHERE ID_MENU='$del'");
-		delfiles($del);			
+		delfiles($del, $con);			
 	}else{
 		mysqli_query($con ,"DELETE FROM MENU WHERE ID_MENU='$del'");
 		
 		$quemv=mysqli_query($con ,"SELECT * FROM MENU WHERE PARENT='$del'");
 		while($datamv=mysqli_fetch_assoc($quemv)){ 
-			movemenu($datamv['ID_MENU'], 2);
+			movemenu($datamv['ID_MENU'], 2, $con);
 		}
 		mysqli_query($con ,"UPDATE MENU SET PARENT='-1', LEVEL='2' WHERE PARENT='$del'");
 		
@@ -231,7 +231,7 @@ if(isset($_POST['editmenu'])){
 		$level=$cblevel+1;
 		$quemv=mysqli_query($con ,"SELECT * FROM MENU WHERE PARENT='$idmenu'");
 		while($datamv=mysqli_fetch_assoc($quemv)){
-			movemenu($datamv['ID_MENU'], $level);
+			movemenu($datamv['ID_MENU'], $level, $con);
 		}
 		mysqli_query($con ,"UPDATE MENU SET LEVEL='$level' WHERE PARENT='$idmenu'");
 				
@@ -250,7 +250,7 @@ if(isset($_POST['editmenu'])){
 	}
 		
 	if($cbcontent==0){
-		delfiles($idmenu);
+		delfiles($idmenu, $con);
 	}else{
 		$queurutan=mysqli_query($con ,"SELECT MAX(URUTAN) AS NO FROM DATA_FILES WHERE ID_MENU='$idmenu'");
 		$urutan=mysqli_fetch_assoc($queurutan);
@@ -353,7 +353,8 @@ if(isset($_POST['editmenu'])){
 	echo "<script>document.location='./?id=".$idmenu."';</script>";	
 }
 ?>
-<script type="text/javascript">	
+<script type="text/javascript">
+	
 	function updkonten(data){
 		$("#konten").fadeOut();
 		var id = data.toString();
@@ -382,16 +383,17 @@ if(isset($_POST['editmenu'])){
 	
 	function changeparent(data){
 		var level=parseInt(data);
+		var idmenu = $("#idmenu").val();
+		//alert("SELECT ID_MENU, NAMA FROM MENU WHERE LEVEL='' AND ID_MENU>0 AND CONTENT=0 AND ID_MENU!=''");
 		$("#cbparent").fadeOut();
 	    $.ajax({
-	        url: "ajax.combo.parent.php?level=" + level,
+	        url: "ajax.combo.parent.php?level=" + level + "&idmenu=" + idmenu,
 			type:	"GET",
 	        success: function(data){
 	            $("#cbparent").html(data);
 			    $("#cbparent").fadeIn(100);
 	        }
 	    });
-		
 	}
 	
 	function pakaikonten(data, id){
@@ -448,19 +450,7 @@ if(isset($_POST['editmenu'])){
 		});		
 	}
 	
-	$(document).ready(function(){
-		updkonten(<?php if($_GET['id']>0) 
-							echo $_GET['id'];
-						else
-							echo "0";
-			?>);
-		//updkonten(0);
-		//pakaikonten(0);
-	});
-	
-</script>
-
-  <script language="text/javascript">
+			
   	function redirect(id){
 		var idmenu=id.toString();
 		alert(idmenu);
@@ -690,4 +680,11 @@ if(isset($_POST['editmenu'])){
 <script src="../dist/js/pages/dashboard2.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
+<script type="text/javascript">
+	updkonten('<?php if($_GET['id']>0) 
+							echo $_GET['id'];
+						else
+							echo "0";
+			?>');
+</script>
 </body>

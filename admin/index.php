@@ -7,7 +7,6 @@
 <script src="../jquery-ui-1.8.1.custom/js/jquery-ui-1.8.1.custom.min.js"></script>
 <script src="../tinymce/tinymce.min.js"></script>
 <script src="../fontawesome-iconpicker-1.2.2/dist/js/fontawesome-iconpicker.min.js"></script>
-
   <title>Admin SMAN 2 Malang</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">

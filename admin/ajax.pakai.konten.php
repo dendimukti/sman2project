@@ -52,11 +52,11 @@ if($idmenu>0){
 if($n>1)
 	echo '<i class="fa fa-caret-up" onclick="changeOrder(\'up\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/> &nbsp;&nbsp;&nbsp;&nbsp;';
 else
-	echo '<i class="fa fa-caret-up" onclick="changeOrder(\'up\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/> &nbsp;&nbsp;&nbsp;&nbsp;';
+	echo '<i class="fa fa-caret-up" /> &nbsp;&nbsp;&nbsp;&nbsp;';
 if($n<$tot)
-	echo '<i class="fa fa-caret-down"/>';
+	echo '<i class="fa fa-caret-down" onclick="changeOrder(\'down\', \''.$datafile['ID_FILES'].'\', \''.$datafile['ID_MENU'].'\');"/> &nbsp;&nbsp;&nbsp;&nbsp;';
 else
-	echo '<i class="fa fa-caret-down"/>';
+	echo '<i class="fa fa-caret-down" );"/> &nbsp;&nbsp;&nbsp;&nbsp;';
 		$n++;		
 		echo '</td>
 	</tr>';

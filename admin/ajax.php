@@ -1,6 +1,7 @@
 <?php
 	include("../config/conn.php");
 	
+	$statContent="";
 	$idmenu=0;
 	$nama="";
 	$icon="";
@@ -39,7 +40,7 @@
 		
 		$quepar=mysqli_query($con, "SELECT * FROM MENU WHERE PARENT='$idmenu'");
 		$jumChild=mysqli_num_rows($quepar);
-		$statContent="";
+		
 		if($jumChild>0)	$statContent="disabled";
 	}
 	
