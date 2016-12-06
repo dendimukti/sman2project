@@ -17,9 +17,9 @@
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="ionicons-2.0.1/css/ionicons.min.css">
   <!-- jvectormap -->
   <link rel="stylesheet" href="plugins/jvectormap/jquery-jvectormap-1.2.2.css">
   <!-- Theme style -->
@@ -37,7 +37,7 @@
   <![endif]-->
   
   <style type="text/css">
-  	.teks{
+  	.teks .futer{
 		font-family: Source Sans Pro;
 		font-size: 16px;
 		font-weight: 600;
@@ -126,6 +126,12 @@
 	.skin-green-light .main-header .logo:hover {
 	    background-color: #f9fafc;
 	}
+	.main-footer {
+	    background: #fff;
+	    padding: 10px 15px 30px 15px;
+	    color: #444;
+	    border-top: 1px solid #d2d6de;
+	}
 	/*
 	.skin-green-light .main-header .logo {
 	    background-color: #f9fafc;
@@ -136,13 +142,56 @@
 <script type="text/javascript">
 
 var tim = 0;
-function reload() {
-	tim = setTimeout("window.location.replace('./');",300000);   // 5 minutes	#	1 Sec = 1000
+var wkt = 300000;			// 5 minutes	#	1 Sec = 1000	//300000
+var waktu = wkt;
+var durtime = 0;
+var curtime = 0;
+var rmntime = 0;
+var statepause=true;
+function reload(){
+	if(statepause){
+		window.location.replace('./');	
+	}
+	else{
+		statepause=true;
+		normcanceltimer();
+	}
+}
+
+function beforeload() {
+	//if(!statepause)	alert(wkt);	
+	tim = setTimeout("reload();",waktu);
+}
+
+function myFunc(state, dt, ct, seek){
+	var vid = state;
+	var seeking = seek.toString();
+	durtime = (parseFloat(dt) * 1000).toString();
+	curtime = (parseFloat(ct) * 1000).toString();
+	rmntime = parseInt(durtime-curtime);
+	//alert("Pause: "+vid+"\nSeeking: "+vid+"\nDurasi: "+durtime+"\nCurTime: "+curtime+"\nRemainTime: "+rmntime);
+	
+	if(vid){
+		waktu = 5000;
+		statepause=true;
+		canceltimer();	
+	}else{
+		waktu=wkt+rmntime;
+		statepause=false;
+		canceltimer();	
+	}
 }
 
 function canceltimer() {
 	window.clearTimeout(tim);  // cancel the timer on each mousemove/click
-	reload();  // and restart it
+	beforeload();  // and restart it		
+}
+
+function normcanceltimer(){
+	if(statepause){
+		waktu = 5000;
+		canceltimer();
+	}
 }
 
 function changeval(data){
@@ -156,7 +205,7 @@ function changeval(data){
 }
 </script>
 </head>
-<body class="hold-transition skin-green-light sidebar-mini" onclick="canceltimer()" onmouseover="canceltimer()" onkeypress="canceltimer()">
+<body class="hold-transition skin-green-light sidebar-mini" onclick="normcanceltimer()" onmouseover="normcanceltimer()" onkeypress="normcanceltimer()">
 <div class="wrapper">
   <header class="main-header">
     <!-- Logo -->
@@ -302,9 +351,13 @@ if(isset($_REQUEST['id'])){
 			echo "<br>";
 			echo "<div class='teks'>".$datafile['KET']."</div><br><br><br>";
 		}
+		else if($datafile['JENIS']=="link"){
+			echo "<br>";
+			echo "<a href='".$datafile['KET']."'><h3>".$datafile['NAMA']."</h3></a><br><br><br>";
+		}
 		else if($datafile['JENIS']=="vid"){
 			echo "<div class='judul'>".$datafile['NAMA']."</div><br><br>";
-			echo '<video controls>
+			echo '<video controls class="vdeo" onplaying="myFunc(this.paused, this.duration, this.currentTime, this.seeking)" onpause="myFunc(this.paused, this.duration, this.currentTime, this.seeking)">
 					  <source src="data/vid/'.$datafile['URL'].'" type="video/mp4">
 					Your browser does not support the video tag.
 				  </video> ';
@@ -339,6 +392,7 @@ else{
 <b><h1>INTEGRATED DATA SERVICE</h1></b>
 <img src="data/logos2.png" style="width:214px;margin: 32px;">
 <h2>SMA NEGERI 2 MALANG</h2>
+<h3>Jalan Laksamana Laut RE Martadinata No. 84, Malang, Jawa Timur, Indonesia</h3>
 <?php
 }
 mysqli_close($con);
@@ -390,11 +444,13 @@ mysqli_close($con);
   <!-- /.content-wrapper -->
 
   <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      
+    <div class="pull-right">
+      <strong>Website Resmi SMAN 2 Malang <a href="http://smandua.com">http://smandua.com</a></strong>
     </div>
-    <strong>Copyright &copy; 2016 <a href="http://inagata.com">Inagata Technosmith</a>.</strong> All rights
-    reserved.
+    <div class="pull-left">
+		<strong>Copyright &copy; 2016 <a href="http://inagata.com">Inagata Technosmith</a>.</strong> All rights reserved.
+	</div>
+	
   </footer>
 </div>
 </div>

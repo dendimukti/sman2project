@@ -60,3 +60,7 @@ td, th {
 textarea.form-control {
     height: 108px;
 }
+
+.skin-blue .main-header .logo:hover {
+    background-color: #00a65a;
+}

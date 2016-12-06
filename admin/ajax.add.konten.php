@@ -71,6 +71,18 @@
 					    <input type='text' class='form-control' name='desc[]' placeholder='Deskripsi'>
 					  </div>";
 			}
+			else if($jenis=='link'){
+				echo "<div class='form-group'>
+					    <label>Nama Link:</label>
+					    <input type='text' class='form-control' name='name[]' placeholder='Nama Link'>
+					  </div>					
+					  <input type='hidden' name='jenis[]' value='link'>
+					  <input type='file' name='data[]' value='' style='display:none'>
+					  <div class='form-group'>
+					    <label>Alamat URL:</label>
+					    <input type='text' class='form-control' name='desc[]' placeholder='Alamat URL'>
+					  </div>";
+			}
 			else if($jenis=='flash'){
 				echo "<div class='form-group'>
 					    <label>Nama Flash:</label>

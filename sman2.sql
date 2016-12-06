@@ -29,11 +29,11 @@ CREATE TABLE `data_files` (
   `KET` text,
   `URUTAN` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID_FILES`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=latin1;
 
 /*Data for the table `data_files` */
 
-insert  into `data_files`(`ID_FILES`,`JENIS`,`ID_MENU`,`NAMA`,`URL`,`KET`,`URUTAN`) values (66,'pdf',1,'Profil Sekolah','7fdg23or6n.pdf','Profil Sekolah',1),(67,'pdf',45,'physics','5i4s3zigu6.pdf','physics',1),(68,'pdf',46,'Kalender Pendidikan','ahfr58ardj.pdf','Kalender Pendidikan',1),(69,'gbr',1,'anonim','q278kp5rz4.png','',2),(70,'vid',1,'workout 9gag','kkopzrwabx.mp4','',3);
+insert  into `data_files`(`ID_FILES`,`JENIS`,`ID_MENU`,`NAMA`,`URL`,`KET`,`URUTAN`) values (66,'pdf',1,'Profil Sekolah','7fdg23or6n.pdf','Profil Sekolah',1),(67,'pdf',45,'physics','5i4s3zigu6.pdf','physics',3),(68,'pdf',46,'Kalender Pendidikan','ahfr58ardj.pdf','Kalender Pendidikan',1),(69,'gbr',1,'anonim','q278kp5rz4.png','',2),(70,'vid',1,'workout 9gag','kkopzrwabx.mp4','',3),(71,'flash',45,'yoi','t1fvbqqjgb.swf','hahahahahaha',1),(72,'flash',45,'ntaps','4t3vcrty7b.swf','ysdasdfksadk',2);
 
 /*Table structure for table `menu` */
 

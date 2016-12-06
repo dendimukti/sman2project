@@ -121,6 +121,9 @@ if(isset($_POST['addmenu'])){
 				if($jns=="teks"){
 				    mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
 					$confirm.="\n1 text data have been uploaded,";
+				}else if($jns=="link"){
+				    mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'link', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
+					$confirm.="\n1 link data have been uploaded,";
 				}else{
 					$data=$_FILES["data"]["name"][$i]; 
 					$tmp_name=$_FILES["data"]["tmp_name"][$i];
@@ -265,6 +268,9 @@ if(isset($_POST['editmenu'])){
 			    mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($urutan)."')");
 				$confirm.="\n1 text data have been uploaded,<br>";
 				//$confirm.="\n1 INSERT INTO DATA_FILES VALUES('', 'teks', '$idmenu', '$name', '', '$desc', '".($urutan)."')<br>";
+			}else if($jns=="link"){
+			    mysqli_query($con ,"INSERT INTO DATA_FILES VALUES('', 'link', '$idmenu', '$name', '', '$desc', '".($i+1)."')");
+				$confirm.="\n1 link data have been uploaded,";
 			}else{
 				$data=$_FILES["data"]["name"][$i]; 
 				$tmp_name=$_FILES["data"]["tmp_name"][$i];

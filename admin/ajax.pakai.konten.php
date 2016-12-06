@@ -8,6 +8,7 @@ echo "
 		<th witdh='70%'>
 			<select name='jeniskonten' id='jeniskonten' class='form-control'>
 				<option value='teks'>Teks</option>
+				<option value='link'>Link</option>
 				<option value='html'>Html</option>
 				<option value='flash'>Flash</option>
 				<option value='pdf'>PDF</option>
@@ -44,6 +45,9 @@ if($idmenu>0){
 		}
 		else if($datafile['JENIS']=="flash"){
 			echo " <a href='../data/flash/".$datafile['URL']."'>(FLASH) ".$datafile['NAMA']."</a><br>";
+		}
+		else if($datafile['JENIS']=="link"){
+			echo " <a href='".$datafile['KET']."'>(LINK) ".$datafile['NAMA']."</a><br>";
 		}
 		
 		echo '</td>
