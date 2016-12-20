@@ -172,7 +172,7 @@ function myFunc(state, dt, ct, seek){
 	//alert("Pause: "+vid+"\nSeeking: "+vid+"\nDurasi: "+durtime+"\nCurTime: "+curtime+"\nRemainTime: "+rmntime);
 	
 	if(vid){
-		waktu = 5000;
+		waktu = wkt;
 		statepause=true;
 		canceltimer();	
 	}else{
@@ -189,7 +189,7 @@ function canceltimer() {
 
 function normcanceltimer(){
 	if(statepause){
-		waktu = 5000;
+		waktu = wkt;
 		canceltimer();
 	}
 }
