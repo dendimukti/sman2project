@@ -500,7 +500,7 @@ if(isset($_POST['editmenu'])){
 			echo '<ul class="treeview-menu">';
 			$n=1;
 			while($data=mysqli_fetch_assoc($que2)){				
-				echo '<li class="active"><a href="#">
+				echo '<li><a href="#">
 				<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
 						
 				if($n>1){
@@ -543,7 +543,7 @@ if(isset($_POST['editmenu'])){
 	$n=1;
 	while($data=mysqli_fetch_assoc($que1)){
 		echo '
-		<li class="treeview active">
+		<li class="treeview">
 			<a href="#">
 			<i class="fa '.$data['LOGO'].'"></i>'.$data['NAMA'].' ';
 		if($data['ID_MENU']>0){ 

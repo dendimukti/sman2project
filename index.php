@@ -205,7 +205,7 @@ function changeval(data){
 }
 </script>
 </head>
-<body class="hold-transition skin-green-light sidebar-mini" onclick="normcanceltimer()" onmouseover="normcanceltimer()" onkeypress="normcanceltimer()">
+<body class="hold-transition skin-green-light fixed sidebar-mini" onclick="normcanceltimer()" onmouseover="normcanceltimer()" onkeypress="normcanceltimer()">
 <div class="wrapper">
   <header class="main-header">
     <!-- Logo -->
@@ -267,7 +267,7 @@ function menu($content, $level, $parent, $con){
 				$link='#';
 				
 			echo '
-			<li class="active">
+			<li>
 				<a href="'.$link.'">
 					<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
 				    if($data['CONTENT']==0){
@@ -297,7 +297,7 @@ while($data=mysqli_fetch_assoc($que1)){
 		$link='#';
 	
 	echo '
-	<li class="treeview active">
+	<li class="treeview">
     	<a href="'.$link.'">';
 		echo '
 			<i class="fa '.$data['LOGO'].'"></i><span> '.$data['NAMA'].'</span>';        
@@ -305,7 +305,7 @@ while($data=mysqli_fetch_assoc($que1)){
 		if($data['CONTENT']==0){
 			echo '
 			<span class="pull-right-container">
-	        	
+	        	<i class="fa fa-angle-left pull-right"></i>
 			</span>';
 		}
 		echo '
@@ -461,7 +461,7 @@ mysqli_close($con);
 <!-- FastClick -->
 <script src="plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/app.js"></script>
+<script src="dist/js/app.min.js"></script>
 <!-- Sparkline -->
 <script src="plugins/sparkline/jquery.sparkline.min.js"></script>
 <!-- jvectormap -->
