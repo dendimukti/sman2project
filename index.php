@@ -132,11 +132,12 @@
 	    color: #444;
 	    border-top: 1px solid #d2d6de;
 	}
-	/*
-	.skin-green-light .main-header .logo {
-	    background-color: #f9fafc;
-	    color: #000000;
-	}*/
+.sidebar-menu>li>a {
+    padding: 12px 25px 12px 15px;
+}
+.sidebar-menu, .main-sidebar .user-panel, .sidebar-menu>li.header {
+    white-space: normal;
+}
 </style>
 
 <script type="text/javascript">
