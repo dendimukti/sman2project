@@ -50,8 +50,8 @@
 		padding-right: 200px;
 	}
 	.judul{
-		width: 399px;
-		height: 24px;
+		width: 800px;
+		height: 50px;
 		font-family: Source Sans Pro;
 		font-size: 36px;
 		font-weight: 600;
@@ -233,7 +233,7 @@ function changeval(data){
             <a href="#" data-toggle="control-sidebar"><i class="fa fa-clock-o"></i> &nbsp; 
 		<?php
 			$today = getdate();
-			$hari=array("", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu");
+			$hari=array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "");
 			$bulan=array("", "Januari", "Pebruari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
 			echo $hari[$today['wday']].", ".$today['mday']." ".$bulan[$today['mon']]." ".$today['year'];
 			
@@ -254,11 +254,22 @@ function changeval(data){
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
 <?php
+$GLOBALS['arrparent']="";
+function getparent($idmenu, $con){
+	$que=mysqli_query($con, "SELECT * FROM MENU WHERE ID_MENU='".$idmenu."'");
+    while($data=mysqli_fetch_assoc($que)){
+    	if($data['PARENT'] != 0){
+    		$GLOBALS['arrparent'].=$data['PARENT']."#";
+			getparent($data['PARENT'], $con);
+		}
+	}
+}
 
-function menu($content, $level, $parent, $con){
+function menu($arrparent, $content, $level, $parent, $con){
     $que2=mysqli_query($con, "SELECT * FROM MENU WHERE LEVEL='".$level."' AND PARENT='".$parent."' ORDER BY URUTAN ASC");
     $jum=mysqli_num_rows($que2);
     if($jum>0){
+    	
 		echo '
 		<ul class="treeview-menu">';
 		while($data=mysqli_fetch_assoc($que2)){
@@ -266,9 +277,13 @@ function menu($content, $level, $parent, $con){
 				$link='./?id='.$data['ID_MENU'];
 			else
 				$link='#';
-				
+
+			$treeview="";
+			if(in_array($data['ID_MENU'], $arrparent))
+				$treeview .= 'class="active"';
+						
 			echo '
-			<li>
+			<li '.$treeview.'>
 				<a href="'.$link.'">
 					<i class="fa '.$data['LOGO'].'"></i> '.$data['NAMA'];
 				    if($data['CONTENT']==0){
@@ -279,7 +294,7 @@ function menu($content, $level, $parent, $con){
 					}
 			    echo '
 				</a>';
-				menu($data['CONTENT'], ($level+1), $data['ID_MENU'], $con);
+				menu($arrparent, $data['CONTENT'], ($level+1), $data['ID_MENU'], $con);
 		    echo '
 			</li>';
 		}
@@ -290,6 +305,16 @@ function menu($content, $level, $parent, $con){
 }
 	
 $que1=mysqli_query($con, "SELECT * FROM MENU WHERE LEVEL='1' AND ID_MENU>0 ORDER BY URUTAN ASC");
+$idmenu="";
+if(isset($_REQUEST['id'])){
+	$idmenu=$_REQUEST['id'];
+	getparent($idmenu,$con);
+	//echo $GLOBALS["arrparent"];
+	$arrparent=explode("#",$GLOBALS["arrparent"]);
+	array_pop($arrparent);
+	//print_r($arrparent);	
+}
+
 while($data=mysqli_fetch_assoc($que1)){
 	//redirect('.$data['ID_MENU'].');
 	if($data['CONTENT']==1)
@@ -297,8 +322,11 @@ while($data=mysqli_fetch_assoc($que1)){
 	else
 		$link='#';
 	
+	$treeview="treeview";
+	if(in_array($data['ID_MENU'], $arrparent))
+		$treeview .= " active";
 	echo '
-	<li class="treeview">
+	<li class="'.$treeview.'">
     	<a href="'.$link.'">';
 		echo '
 			<i class="fa '.$data['LOGO'].'"></i><span> '.$data['NAMA'].'</span>';        
@@ -313,7 +341,7 @@ while($data=mysqli_fetch_assoc($que1)){
 		</a>';
     $max=mysqli_fetch_assoc(mysqli_query($con, "SELECT MAX(LEVEL) AS LV FROM MENU"));
 	$max=$max['LV'];
-    menu($data['CONTENT'], 2, $data['ID_MENU'], $con);
+    menu($arrparent, $data['CONTENT'], 2, $data['ID_MENU'], $con);
 	echo '
 	</li>';
 }
